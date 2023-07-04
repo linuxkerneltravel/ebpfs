@@ -1,0 +1,22 @@
+{
+  "name": "ebpfs",
+  "version": "1.0.0",
+  "description": "eBPF Hub",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hanbings/ebpfs.git"
+  },
+  "author": "hanbings <hanbings@hanbings.io>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/hanbings/ebpfs/issues"
+  },
+  "homepage": "https://github.com/hanbings/ebpfs#readme",
+  "dependencies": {
+    "@vercel/node": "^2.15.3"
+  }
+}
