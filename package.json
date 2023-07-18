@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/hanbings/ebpfs#readme",
   "dependencies": {
+    "@vercel/kv": "^0.2.2",
     "@vercel/node": "^2.15.3"
   }
 }

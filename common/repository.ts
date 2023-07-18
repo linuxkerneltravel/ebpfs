@@ -2,11 +2,15 @@ export class Repository {
     constructor(
         // 索引 ID
         public id: string,
+        // 创建时间
+        public create: string,
+        // 更新时间
+        public update: string,
         // 组织名
         public organization: string,
         // 项目
         public project: string,
-        // 版本
+        // 版本号
         public version: string,
         // README 文件 url
         public readme: string,

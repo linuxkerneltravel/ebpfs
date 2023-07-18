@@ -1,8 +1,14 @@
 export class Token {
     constructor(
+        // TOKEN
         public token: string,
-        public id: string,
+        // 所属账号
+        public belong: string,
+        // TOKEN 类型
         public type: TokenType,
+        // 创建时间
+        public create: number,
+        // 失效时间
         public expire: number
     ) {
     }
