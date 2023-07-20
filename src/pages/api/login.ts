@@ -14,6 +14,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
 
         // 跳转
         res.redirect(`https://github.com/login/oauth/authorize?client_id=${githubClientID}&state=${state}&redirect_uri=${baseUrl}/login`);
+
+        return;
     }
 
     if (req.method !== 'POST') {
