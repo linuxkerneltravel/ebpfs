@@ -1,7 +1,8 @@
 import {kv} from "@vercel/kv";
 
-export default class Cache<T> {
-    constructor() { }
+export default class CacheService<T> {
+    constructor() {
+    }
 
     set(key: string, value: T): Promise<T | "OK" | null> {
         return kv.set(key, value);
