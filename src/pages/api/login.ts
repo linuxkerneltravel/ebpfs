@@ -6,7 +6,7 @@ import {Token} from "@/common/token";
 import {Account} from "@/common/account";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
-    const githubClientID = process.env.GITHUB_CLIENT_ID;
+    const githubClientID = process.env.GITHUB_OAUTH_CLIENT_ID;
 
     if (req.method === 'GET') {
         const state = Math.random().toString(16).substr(2);
@@ -26,7 +26,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
             return;
         }
 
-        const githubClientSecret = process.env.GITHUB_CLIENT_SECRET;
+        const githubClientSecret = process.env.GITHUB_OAUTH_CLIENT_SECRET;
         const tokens = new CacheService<Token>();
         const accounts = new DatabaseService<Account>();
 
