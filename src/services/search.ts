@@ -14,10 +14,17 @@ export default class SearchService {
         return index.search(query).then(({hits}) => hits);
     }
 
-    async upload(readme: string) {
+    async upload(id: string, readme: string, author: string[], keywords: string[], tags: string[]) {
         const client = algoliasearch(this.applicationId, this.apiKey);
         const index = client.initIndex('docs');
+        const save = {
+            id: id,
+            readme: readme,
+            author: author,
+            keywords: keywords,
+            tags: tags
+        }
 
-        return index.saveObject({readme: readme}).wait();
+        return index.saveObject(save).wait();
     }
 }

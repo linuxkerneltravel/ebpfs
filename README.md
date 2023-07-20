@@ -10,6 +10,7 @@
 
    | 变量名                     | 描述                            | 示例                             |
    | -------------------------- | ------------------------------- | -------------------------------- |
+   | BASE_API                   | 基本 URL                        | https://ebpfs.vercel.app         |
    | GITHUB_OAUTH_CLIENT_ID     | 用于 OAuth 登录的 Client ID     | bb288f347cbc9b96de8c             |
    | GITHUB_OAUTH_CLIENT_SECRET | 用户 OAuth 登录的 Client Secret | 9f7c87a1a5a2351687231f683445224e |
    | ALGOLIA_APPLICATION_ID     | Algolia 搜索服务应用 ID         | KFCVME50                         |
