@@ -10,10 +10,8 @@ export class Account {
         public avatar: string,
         // 类型
         public type: AccountType,
-        // 关键字
-        public keys: string[],
-        // 关联到账号的 repository 的 id
-        public repositories: string[],
+        // 创建时间
+        public created: number,
     ) {
     }
 }
