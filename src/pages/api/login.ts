@@ -6,7 +6,7 @@ import {ExpireTime, Token, TokenType} from "@/common/token";
 import {Account, AccountType} from "@/common/account";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
-    if (req.method !== 'GET') {
+    if (req.method === 'GET') {
         const {code, state} = req.query;
 
         if (code === null || code === '') {

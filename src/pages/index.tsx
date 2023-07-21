@@ -9,7 +9,7 @@ function getGithubAuthorizeUrl() {
     const state = Math.random().toString(16).substr(2);
     const baseUrl = process.env.BASE_URL;
 
-    return `https://github.com/login/oauth/authorize?client_id=${githubClientID}&state=${state}&redirect_uri=${baseUrl}/login`;
+    return `https://github.com/login/oauth/authorize?client_id=${githubClientID}&state=${state}&redirect_uri=${baseUrl}/api/login`;
 }
 
 export default function Home() {
