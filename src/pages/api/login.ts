@@ -26,22 +26,23 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
 
         // 请求 GitHub API 获取用户信息
         fetch(`https://github.com/login/oauth/access_token?client_id=${githubClientID}&client_secret=${githubClientSecret}&code=${code}&state=${state}`)
+            .then(r => r.json())
             .then(r => {
                 return fetch('https://api.github.com/user', {
                     headers: {
-                        // @ts-ignore
-                        Authorization: `Bearer ${r.json().access_token}`
+                        Authorization: `Bearer ${r.access_token}`,
+                        Accept: 'application/json'
                     }
                 });
             })
+            .then(r => r.json())
             .then(r => {
-                // @ts-ignore
-                const {avatar_url, id, name} = r.json();
+                const {avatar_url, id, name} = r;
 
                 // 检查用户是否已经记录过
                 // 如果数据库中没有则创建
                 const account = new Account(
-                    Math.random().toString(16).substr(2),
+                    Math.random().toString(16),
                     id,
                     name,
                     avatar_url,
@@ -53,7 +54,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
                 // 无论如何都返回用户信息和有效 Token
                 const time = new Date().getTime();
                 const token = new Token(
-                    Math.random().toString(16).substr(2),
+                    Math.random().toString(16),
                     account.id,
                     TokenType.OAUTH_TOKEN,
                     time,
@@ -62,9 +63,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
 
                 res.status(200).json(new Message(200, 'success', {account: account, token: token}));
             })
-            .catch(err => {
-                res.status(500).json(new Message(500, 'request github api failed.', err));
-            });
+            .catch(err => res.status(500).json(new Message(500, 'request github api failed.', err)));
     } else {
         res.status(400).json(new Message(400, 'request method not match.', null));
     }
