@@ -45,6 +45,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         const userResJson = await userRes.json();
         const {avatar_url, id, name} = userResJson;
 
+        // 检查表
+        await accounts.autoMigrate();
+
         // 如果数据库中没有则创建
         const account = new Account(
             crypto.randomUUID(),

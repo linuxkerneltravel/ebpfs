@@ -12,7 +12,29 @@ interface Database {
 export default class DatabaseService<T> {
     constructor(
         public db = createKysely<Database>()
-    ) {
+    ) { }
+
+    public async autoMigrate() {
+        // 初始化表
+        await this.db.schema.createTable('repository')
+            .addColumn('id', 'text', col => col.primaryKey())
+            .addColumn('name', 'text')
+            .addColumn('description', 'text')
+            .addColumn('keywords', 'text')
+            .addColumn('tags', 'text')
+            .addColumn('readme', 'text')
+            .addColumn('author', 'text')
+            .addColumn('created', 'bigint')
+            .execute();
+
+        await this.db.schema.createTable('account')
+            .addColumn('id', 'text', col => col.primaryKey())
+            .addColumn('openid', 'text')
+            .addColumn('nickname', 'text')
+            .addColumn('avatar', 'text')
+            .addColumn('type', 'text')
+            .addColumn('created', 'bigint')
+            .execute();
     }
 
     public async createAccount({id, openid, nickname, avatar, type, created}: Account) {
