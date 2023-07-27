@@ -15,26 +15,29 @@ export default class DatabaseService<T> {
     ) { }
 
     public async autoMigrate() {
-        // 初始化表
-        await this.db.schema.createTable('repository')
-            .addColumn('id', 'text', col => col.primaryKey())
-            .addColumn('name', 'text')
-            .addColumn('description', 'text')
-            .addColumn('keywords', 'text')
-            .addColumn('tags', 'text')
-            .addColumn('readme', 'text')
-            .addColumn('author', 'text')
-            .addColumn('created', 'bigint')
-            .execute();
+        // FIXME ？？？ 怪了 为什么没有检查表是否存在的接口 （考虑换用执行 SQL）
+        try {
+            // 初始化表
+            await this.db.schema.createTable('repository')
+                .addColumn('id', 'text', col => col.primaryKey())
+                .addColumn('name', 'text')
+                .addColumn('description', 'text')
+                .addColumn('keywords', 'text')
+                .addColumn('tags', 'text')
+                .addColumn('readme', 'text')
+                .addColumn('author', 'text')
+                .addColumn('created', 'bigint')
+                .execute();
 
-        await this.db.schema.createTable('account')
-            .addColumn('id', 'text', col => col.primaryKey())
-            .addColumn('openid', 'text')
-            .addColumn('nickname', 'text')
-            .addColumn('avatar', 'text')
-            .addColumn('type', 'text')
-            .addColumn('created', 'bigint')
-            .execute();
+            await this.db.schema.createTable('account')
+                .addColumn('id', 'text', col => col.primaryKey())
+                .addColumn('openid', 'text')
+                .addColumn('nickname', 'text')
+                .addColumn('avatar', 'text')
+                .addColumn('type', 'text')
+                .addColumn('created', 'bigint')
+                .execute();
+        } catch (ignored) { }
     }
 
     public async createAccount({id, openid, nickname, avatar, type, created}: Account) {
