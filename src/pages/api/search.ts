@@ -2,7 +2,7 @@ import type {NextApiRequest, NextApiResponse} from 'next'
 import SearchService from "@/services/search";
 import Message from "@/common/message";
 
-export default function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
     if (req.method !== 'GET') {
         const {query} = req.query;
 
@@ -29,7 +29,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
         }
 
         const search = new SearchService(algoliaApplicationID, algoliaAPIKey);
+        const result = await search.search(query);
 
-        res.status(200).json(new Message(200, 'OK', search.search(query)));
+        res.status(200).json(new Message(200, 'OK', result));
     } else res.status(400).json(new Message(400, 'request method not match.', null));
 }

@@ -12,7 +12,8 @@ interface Database {
 export default class DatabaseService<T> {
     constructor(
         public db = createKysely<Database>()
-    ) { }
+    ) {
+    }
 
     public async autoMigrate() {
         // FIXME ？？？ 怪了 为什么没有检查表是否存在的接口 （考虑换用执行 SQL）
@@ -37,7 +38,8 @@ export default class DatabaseService<T> {
                 .addColumn('type', 'text')
                 .addColumn('created', 'bigint')
                 .execute();
-        } catch (ignored) { }
+        } catch (ignored) {
+        }
     }
 
     public async createAccount({id, openid, nickname, avatar, type, created}: Account) {
