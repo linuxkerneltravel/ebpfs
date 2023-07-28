@@ -38,10 +38,9 @@ export default function Search() {
                     (query && result) &&
                     <div className="flex flex-col gap-8">
                         {result.map((index) => (
-                            <Row key=""
-                                 title={`${index.organization}  / ${index.project}`}
-                                 text={index.readme}
-                                 url={index.url}
+                            <Row key={index.id}
+                                 index={index}
+                                 highlight={query as string}
                             />
                         ))}
                         <p className="text-gray-400 text-xs">关键词 {query} 共 {result.length} 个结果</p>
