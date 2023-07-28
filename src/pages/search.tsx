@@ -5,6 +5,7 @@ import {useState} from "react";
 import {Index} from "@/common";
 import Message from "@/common/message";
 import Row from "@/pages/components/Row";
+import Loading from "@/pages/components/Loading";
 
 const inter = Inter({subsets: ['latin']})
 
@@ -28,8 +29,14 @@ export default function Search() {
                 </div>
                 {(!query) && <img src="https://github.com/images/modules/search/home-desktop-light.webp" alt=""/>}
                 {
+                    (query && !result) &&
+                    <div className="flex justify-center items-center">
+                        <Loading />
+                    </div>
+                }
+                {
                     (query && result) &&
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-8">
                         {result.map((index) => (
                             <Row key=""
                                  title={`${index.organization}  / ${index.project}`}
@@ -37,7 +44,7 @@ export default function Search() {
                                  url={index.url}
                             />
                         ))}
-                        <p className="text-gray-400 text-xs">`关键词 ${query} 共 ${result.length} 个结果`</p>
+                        <p className="text-gray-400 text-xs">关键词 {query} 共 {result.length} 个结果</p>
                     </div>
                 }
             </div>
