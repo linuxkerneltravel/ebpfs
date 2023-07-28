@@ -31,6 +31,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         const search = new SearchService(algoliaApplicationID, algoliaAPIKey);
         const result = await search.search(query);
 
-        res.status(200).json(new Message(200, 'OK', result));
+        res.status(200).json(new Message(200, 'OK', result.hits));
     } else res.status(400).json(new Message(400, 'request method not match.', null));
 }

@@ -4,6 +4,7 @@ import {useRouter} from "next/router";
 import {useState} from "react";
 import {Index} from "@/common";
 import Message from "@/common/message";
+import Row from "@/pages/components/Row";
 
 const inter = Inter({subsets: ['latin']})
 
@@ -13,10 +14,8 @@ export default function Search() {
 
     if (query) {
         fetch('/api/search?query=' + query)
-            .then(result => result.json() as Promise<Message<any>>)
-            .then(data => {
-                console.log(data.data);
-            });
+            .then(result => result.json() as Promise<Message<Index[]>>)
+            .then(data =>  result.push(data.data));
     }
 
     return (
@@ -28,6 +27,15 @@ export default function Search() {
                     <p className="text-gray-400 text-xs">按下 Enter 键进行搜索</p>
                 </div>
                 {(!query) && <img src="https://github.com/images/modules/search/home-desktop-light.webp" alt=""/>}
+                {
+                    (query) &&
+                    <div>
+                        {result.map((index) => (
+                            // @ts-ignore
+                            <Row key="" title={`${index.organization}  / ${index.project}`} text={index.readme} url={index.url}/>
+                        ))}
+                    </div>
+                }
             </div>
         </main>
     )
