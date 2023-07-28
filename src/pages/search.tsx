@@ -13,7 +13,7 @@ export default function Search() {
     const {query} = useRouter().query;
     const [result, setResult] = useState<Index[]>()
 
-    if (query) {
+    if (query && !result) {
         fetch('/api/search?query=' + query)
             .then(result => result.json() as Promise<Message<Index[]>>)
             .then(data => setResult(data.data));
