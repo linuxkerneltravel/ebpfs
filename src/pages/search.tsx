@@ -10,12 +10,12 @@ const inter = Inter({subsets: ['latin']})
 
 export default function Search() {
     const {query} = useRouter().query;
-    const result = useState<Index[]>()
+    const [result, setResult] = useState<Index[]>()
 
     if (query) {
         fetch('/api/search?query=' + query)
             .then(result => result.json() as Promise<Message<Index[]>>)
-            .then(data =>  result.push(data.data));
+            .then(data => setResult(data.data));
     }
 
     return (
@@ -28,11 +28,14 @@ export default function Search() {
                 </div>
                 {(!query) && <img src="https://github.com/images/modules/search/home-desktop-light.webp" alt=""/>}
                 {
-                    (query) &&
+                    (query && result) &&
                     <div>
                         {result.map((index) => (
-                            // @ts-ignore
-                            <Row key="" title={`${index.organization}  / ${index.project}`} text={index.readme} url={index.url}/>
+                            <Row key=""
+                                 title={`${index.organization}  / ${index.project}`}
+                                 text={index.readme}
+                                 url={index.url}
+                            />
                         ))}
                     </div>
                 }
