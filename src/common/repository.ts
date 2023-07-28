@@ -24,8 +24,6 @@ export class Repository {
         public entry: string,
         // 作者
         public author: string[],
-        // 关键字
-        public keywords: string[],
         // 标签
         public tags: string[]
     ) {

@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         const {
             update, organization, project,
             version, readme, type, repository,
-            entry, author, keywords, tags
+            entry, author, tags
         }: Repository = req.body;
 
         const repo = new Repository(
@@ -40,7 +40,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             repository,
             entry,
             author,
-            keywords,
             tags
         )
 

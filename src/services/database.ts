@@ -75,14 +75,14 @@ export default class DatabaseService<T> {
     public async createRepository(
         {
             id, account, create, update, organization, project, version,
-            readme, type, repository, entry, author, keywords, tags
+            readme, type, repository, entry, author, tags
         }: Repository
     ) {
         return await this.db
             .insertInto('repository')
             .values({
                 id, account, create, update, organization, project, version,
-                readme, type, repository, entry, author, keywords, tags
+                readme, type, repository, entry, author, tags
             })
             .execute();
     }
@@ -105,14 +105,14 @@ export default class DatabaseService<T> {
         queryId: string,
         {
             id, account, create, update, organization, project, version,
-            readme, type, repository, entry, author, keywords, tags
+            readme, type, repository, entry, author, tags
         }: Repository
     ) {
         return await this.db
             .updateTable('repository')
             .set({
                 id, account, create, update, organization, project, version,
-                readme, type, repository, entry, author, keywords, tags
+                readme, type, repository, entry, author, tags
             })
             .where('id', '=', queryId)
             .execute();
