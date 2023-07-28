@@ -29,7 +29,7 @@ export default function Search() {
                 {(!query) && <img src="https://github.com/images/modules/search/home-desktop-light.webp" alt=""/>}
                 {
                     (query && result) &&
-                    <div>
+                    <div className="flex flex-col gap-4">
                         {result.map((index) => (
                             <Row key=""
                                  title={`${index.organization}  / ${index.project}`}
@@ -37,6 +37,7 @@ export default function Search() {
                                  url={index.url}
                             />
                         ))}
+                        <p className="text-gray-400 text-xs">`关键词 ${query} 共 ${result.length} 个结果`</p>
                     </div>
                 }
             </div>
