@@ -3,7 +3,7 @@ import SearchService from "@/services/search";
 import Message from "@/common/message";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
-    if (req.method !== 'GET') {
+    if (req.method === 'GET') {
         const {query} = req.query;
 
         if (!query) {
