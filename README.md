@@ -6,11 +6,11 @@
 
 ## 🚀 部署
 
-1. Fork 仓库
+[![Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/linuxkerneltravel/ebpfs)
 
-2. 注册 [Vercel](https://vercel.com) 账户并 Connect 仓库
+1. 注册 [Vercel](https://vercel.com) 账户并 Connect 仓库或点击上方按钮一键部署
 
-3. 为 Vercel Project 添加环境变量
+2. 为 Vercel Project 添加环境变量
 
    | 变量名                     | 描述                            | 示例                             |
    | -------------------------- | ------------------------------- | -------------------------------- |

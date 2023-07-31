@@ -1,4 +1,5 @@
 import algoliasearch from "algoliasearch";
+import {Index} from "@/common";
 
 export default class SearchService {
     constructor(
@@ -11,17 +12,19 @@ export default class SearchService {
         const client = algoliasearch(this.applicationId, this.apiKey);
         const index = client.initIndex('docs');
 
-        return index.search(query).then(({hits}) => hits);
+        return index.search(query);
     }
 
-    async upload(id: string, readme: string, author: string[], keywords: string[], tags: string[]) {
+    async upload({id, url, organization, project, readme, author, tags}: Index) {
         const client = algoliasearch(this.applicationId, this.apiKey);
         const index = client.initIndex('docs');
         const save = {
             id: id,
+            url: url,
+            organization: organization,
+            project: project,
             readme: readme,
             author: author,
-            keywords: keywords,
             tags: tags
         }
 

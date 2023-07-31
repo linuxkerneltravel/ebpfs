@@ -1,7 +1,9 @@
-export class Repository {
+import {Generated} from "kysely";
+
+export class RepositoryTable {
     constructor(
         // 索引 ID
-        public id: string,
+        public id: Generated<string>,
         // 属于哪个用户
         public account: string,
         // 创建时间

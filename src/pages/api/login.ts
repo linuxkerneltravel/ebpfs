@@ -45,7 +45,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         const userResJson = await userRes.json();
         const {avatar_url, id, name} = userResJson;
 
-        // 检查用户是否已经记录过
+        // 检查表
+        await accounts.autoMigrate();
+
         // 如果数据库中没有则创建
         const account = new Account(
             crypto.randomUUID(),
@@ -56,7 +58,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             new Date().getTime()
         );
 
-        // 如果数据库中有则更新
+        // 检查用户是否已经记录过
+        const accountInDB = await accounts.readAccount(account.openid, AccountType.GITHUB);
+
+        accountInDB.length === 0
+            ? await accounts.createAccount(account)
+            : await accounts.updateAccount(account.openid, account);
+
         // 无论如何都返回用户信息和有效 Token
         const time = new Date().getTime();
         const token = new Token(
@@ -66,6 +74,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             time,
             time + ExpireTime.MINUTE * 30
         );
+
+        await tokens.set(token.token, token);
+        await tokens.expire(token.token, token.expire);
 
         res.status(200).json(new Message(200, 'success', {account: account, token: token}));
     } else {
