@@ -1,4 +1,5 @@
 import {Component} from "react";
+import {useRouter} from "next/router";
 
 interface AvatarProps {
     src?: string;
@@ -12,6 +13,7 @@ export default class Avatar extends Component<AvatarProps, {}> {
                  src={this.props.src ? this.props.src : "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"}
                  alt={this.props.alt ? this.props.alt : "avatar"}
                  style={{height: "48px", width: "48px"}}
+                 onClick={() => useRouter().push("/account")}
             />
         );
     }

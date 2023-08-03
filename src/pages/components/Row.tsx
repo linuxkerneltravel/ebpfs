@@ -1,4 +1,5 @@
 import {Component} from "react";
+import {useRouter} from "next/router";
 
 interface RowProps {
     title: string;
@@ -15,7 +16,7 @@ export default class Row extends Component<RowProps, {}> {
                      height: "180px",
                      borderRadius: "8px",
                  }}
-                 onClick={e => window.location.href = this.props.url}>
+                 onClick={e => useRouter().push(this.props.url)}>
                 <p className="text-gray-900 text-lg font-bold">{this.props.title}</p>
                 <p className="text-gray-600 text-sm">{this.props.text}</p>
             </div>

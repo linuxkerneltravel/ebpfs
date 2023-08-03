@@ -17,8 +17,8 @@ export default function Home() {
                 <div className="mt-2">
                     {
                         State.isLogin()
-                            ? <Button icon="icons8-github.svg" href={State.getGithubAuthorizeUrl()} text="使用 Github 登录"/>
-                            : <Button icon="icons8-github.svg" href="/account" text="查看账号"/>
+                            ? <Button icon="icons8-github.svg" href="/account" text="查看账号"/>
+                            : <Button icon="icons8-github.svg" href={State.getGithubAuthorizeUrl()} text="使用 Github 登录"/>
                     }
                 </div>
             </div>

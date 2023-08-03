@@ -1,4 +1,5 @@
 import {Component} from "react";
+import {useRouter} from "next/router";
 
 interface ButtonProps {
     text: string;
@@ -15,8 +16,9 @@ export default class Button extends Component<ButtonProps, {}> {
                     height: "42px",
                     borderRadius: "8px",
                     backgroundColor: "#24282f"
-                }}>
-                <a href={this.props.href} className="flex flex-row justify-center items-center"
+                }}
+                onClick={() => useRouter().push(this.props.href)}>
+                <a className="flex flex-row justify-center items-center"
                    style={{padding: "20px"}}>
                     <img alt="github login" src={this.props.icon} style={{height: "32px", width: "32px"}}/>
                     <p className={`text-white text-sm`}>{this.props.text}</p>
