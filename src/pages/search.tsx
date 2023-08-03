@@ -31,7 +31,7 @@ export default function Search() {
                 {
                     (query && !result) &&
                     <div className="flex justify-center items-center">
-                        <Loading />
+                        <Loading/>
                     </div>
                 }
                 {

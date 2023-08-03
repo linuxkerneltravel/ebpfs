@@ -1,16 +1,9 @@
 import {Inter} from 'next/font/google'
 import Navbar from "@/pages/components/Navbar";
 import Button from "@/pages/components/Button";
+import {State} from "@/pages/_app";
 
 const inter = Inter({subsets: ['latin']})
-
-function getGithubAuthorizeUrl() {
-    const githubClientID = process.env.GITHUB_OAUTH_CLIENT_ID;
-    const state = crypto.randomUUID();
-    const baseUrl = process.env.BASE_URL;
-
-    return `https://github.com/login/oauth/authorize?client_id=${githubClientID}&state=${state}&redirect_uri=${baseUrl}/api/login`;
-}
 
 export default function Home() {
     return (
@@ -22,7 +15,7 @@ export default function Home() {
                 <p className="text-3xl text-gray-600">欢迎使用 eBPF Hub</p>
                 <p className="text-xl text-gray-600">搜索、探索 eBPF 程序</p>
                 <div className="mt-2">
-                    <Button icon="icons8-github.svg" href={getGithubAuthorizeUrl()} text="使用 Github 登录"/>
+                    <Button icon="icons8-github.svg" href={State.getGithubAuthorizeUrl()} text="使用 Github 登录"/>
                 </div>
             </div>
         </main>
