@@ -1,5 +1,6 @@
 import {Component} from "react";
 import Input from "@/pages/components/Input";
+import {useRouter} from "next/router";
 
 
 interface SearchbarProps {
@@ -16,9 +17,7 @@ export default class Searchbar extends Component<SearchbarProps, {}> {
                 <Input
                     onChange={(value) => {
                     }}
-                    onEnterPress={(value) => {
-                        window.location.href = '/search?query=' + value;
-                    }}
+                    onEnterPress={(value) => useRouter().push("/search?query=" + value)}
                     placeholder={this.props.placeholder}
                     height={this.props.height}
                     width={this.props.width}
