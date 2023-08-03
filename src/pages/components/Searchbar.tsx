@@ -1,16 +1,17 @@
 import {Component} from "react";
 import Input from "@/pages/components/Input";
-import {useRouter} from "next/router";
+import {useRouter, withRouter} from "next/router";
+import {WithRouterProps} from "next/dist/client/with-router";
 
 
-interface SearchbarProps {
+interface SearchbarProps extends WithRouterProps {
     placeholder: string;
     height: string;
     width: string;
     indent?: string;
 }
 
-export default class Searchbar extends Component<SearchbarProps, {}> {
+class Searchbar extends Component<SearchbarProps> {
     render() {
         return (
             <div className="flex justify-center items-center">
@@ -27,3 +28,5 @@ export default class Searchbar extends Component<SearchbarProps, {}> {
         );
     }
 }
+
+export default withRouter(Searchbar);

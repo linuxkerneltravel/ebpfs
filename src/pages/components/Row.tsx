@@ -1,13 +1,14 @@
 import {Component} from "react";
-import {useRouter} from "next/router";
+import {withRouter} from "next/router";
+import {WithRouterProps} from "next/dist/client/with-router";
 
-interface RowProps {
+interface RowProps extends WithRouterProps {
     title: string;
     text: string;
     url: string;
 }
 
-export default class Row extends Component<RowProps, {}> {
+class Row extends Component<RowProps> {
     render() {
         return (
             <div className="shadow-xl flex justify-center flex-col gap-4 p-4"
@@ -16,10 +17,12 @@ export default class Row extends Component<RowProps, {}> {
                      height: "180px",
                      borderRadius: "8px",
                  }}
-                 onClick={e => useRouter().push(this.props.url)}>
+                 onClick={e => this.props.router.push(this.props.url)}>
                 <p className="text-gray-900 text-lg font-bold">{this.props.title}</p>
                 <p className="text-gray-600 text-sm">{this.props.text}</p>
             </div>
         );
     }
 }
+
+export default withRouter(Row);

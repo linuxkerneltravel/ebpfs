@@ -1,9 +1,8 @@
 import '@/styles/globals.css'
-import type {AppProps} from 'next/app'
+import App from "next/app";
 import {Token} from "@/common/token";
 import {Account} from "@/common/account";
 import {withRouter} from "next/router";
-import App from "next/app";
 
 export class State {
     public static token: Token | null = null;
@@ -24,9 +23,9 @@ export class State {
 
 class MyApp extends App {
     render() {
-        const { Component, pageProps, router } = this.props;
+        const {Component, pageProps, router} = this.props;
         const WithRouterComponent = withRouter(Component);
-        return <WithRouterComponent {...pageProps} router={router} />;
+        return <WithRouterComponent {...pageProps} router={router}/>;
     }
 }
 
