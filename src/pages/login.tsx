@@ -12,7 +12,7 @@ export default function Login() {
             console.log(code, state);
             if (typeof code === "string" && typeof state === "string") {
                 // POST /api/login
-                fetch("/api/login")
+                fetch(`/api/login?code=${code}&state=${state}`)
                     .then(res => res.json())
                     .then(res => {
                         State.token = res.token;

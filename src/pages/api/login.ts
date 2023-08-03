@@ -45,6 +45,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         const userResJson = await userRes.json();
         const {avatar_url, id, name} = userResJson;
 
+        // 检查如果三个参数中有一个不为空则正常执行
+        if (
+            avatar_url === null || avatar_url === '' ||
+            id === null || id === '' ||
+            name === null || name === ''
+        ) {
+            res.status(400).json(new Message(400, 'invalid response.', null));
+            return;
+        }
+
         // 检查表
         await accounts.autoMigrate();
 
