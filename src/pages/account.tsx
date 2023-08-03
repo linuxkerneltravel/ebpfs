@@ -1,16 +1,9 @@
 import {Inter} from 'next/font/google'
 import Navbar from "@/pages/components/Navbar";
 import Button from "@/pages/components/Button";
+import {State} from "@/pages/_app";
 
 const inter = Inter({subsets: ['latin']})
-
-function getGithubAuthorizeUrl() {
-    const githubClientID = process.env.GITHUB_OAUTH_CLIENT_ID;
-    const state = crypto.randomUUID();
-    const baseUrl = process.env.BASE_URL;
-
-    return `https://github.com/login/oauth/authorize?client_id=${githubClientID}&state=${state}&redirect_uri=${baseUrl}/api/login`;
-}
 
 export default function Upload() {
     return (
@@ -18,9 +11,12 @@ export default function Upload() {
               className={`flex min-h-screen flex-col ${inter.className} bg-fixed bg-cover bg-center`}>
             <Navbar/>
             <div className="min-h-screen w-full backdrop-blur-2xl flex flex-col gap-2 items-center justify-center">
-                <div className="mt-2">
-                    <Button icon="icons8-github.svg" href={getGithubAuthorizeUrl()} text="使用 Github 登录"/>
-                </div>
+                {
+                    State.isLogin() &&
+                    <div className="mt-2">
+                        <Button icon="icons8-github.svg" href={State.getGithubAuthorizeUrl()} text="使用 Github 登录"/>
+                    </div>
+                }
             </div>
         </main>
     )

@@ -14,7 +14,8 @@ export default class Searchbar extends Component<SearchbarProps, {}> {
         return (
             <div className="flex justify-center items-center">
                 <Input
-                    onChange={(value) => {}}
+                    onChange={(value) => {
+                    }}
                     onEnterPress={(value) => {
                         window.location.href = '/search?query=' + value;
                     }}

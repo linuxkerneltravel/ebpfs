@@ -1,15 +1,7 @@
 import {Inter} from 'next/font/google'
 import Navbar from "@/pages/components/Navbar";
 
-const inter = Inter({subsets: ['latin']})
-
-function getGithubAuthorizeUrl() {
-    const githubClientID = process.env.GITHUB_OAUTH_CLIENT_ID;
-    const state = crypto.randomUUID();
-    const baseUrl = process.env.BASE_URL;
-
-    return `https://github.com/login/oauth/authorize?client_id=${githubClientID}&state=${state}&redirect_uri=${baseUrl}/api/login`;
-}
+const inter = Inter({subsets: ['latin']});
 
 export default function Upload() {
     return (

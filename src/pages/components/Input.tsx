@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 
 interface Props {
     placeholder: string;
@@ -9,7 +9,7 @@ interface Props {
     onEnterPress: (value: string) => void;
 }
 
-const Input: React.FC<Props> = ({ onChange, onEnterPress, placeholder, height, width, indent }) => {
+const Input: React.FC<Props> = ({onChange, onEnterPress, placeholder, height, width, indent}) => {
     const [inputValue, setInputValue] = useState('');
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
