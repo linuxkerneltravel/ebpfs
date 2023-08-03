@@ -16,7 +16,7 @@ export class State {
         const state = crypto.randomUUID();
         const baseUrl = process.env.BASE_URL;
 
-        return `https://github.com/login/oauth/authorize?client_id=${githubClientID}&state=${state}&redirect_uri=${baseUrl}/api/login`;
+        return `https://github.com/login/oauth/authorize?client_id=${githubClientID}&state=${state}&redirect_uri=${baseUrl}/login`;
     }
 }
 
