@@ -1,13 +1,14 @@
 import {Component} from "react";
-import {useRouter} from "next/router";
+import {withRouter} from "next/router";
+import {WithRouterProps} from "next/dist/client/with-router";
 
-interface ButtonProps {
+interface ButtonProps extends WithRouterProps {
     text: string;
     icon: string;
     href: string;
 }
 
-export default class Button extends Component<ButtonProps, {}> {
+class Button extends Component<ButtonProps> {
     render() {
         return (
             <div
@@ -17,7 +18,7 @@ export default class Button extends Component<ButtonProps, {}> {
                     borderRadius: "8px",
                     backgroundColor: "#24282f"
                 }}
-                onClick={() => useRouter().push(this.props.href)}>
+                onClick={() => this.props.router.push(this.props.href)}>
                 <a className="flex flex-row justify-center items-center"
                    style={{padding: "20px"}}>
                     <img alt="github login" src={this.props.icon} style={{height: "32px", width: "32px"}}/>
@@ -27,3 +28,5 @@ export default class Button extends Component<ButtonProps, {}> {
         );
     }
 }
+
+export default withRouter(Button);
