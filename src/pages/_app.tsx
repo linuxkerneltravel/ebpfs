@@ -12,7 +12,7 @@ export class State {
     public static account: Account | null = null;
 
     public static isLogin(): boolean {
-        return State.token !== null;
+        return State.token !== undefined && State.account !== undefined;
     }
 }
 

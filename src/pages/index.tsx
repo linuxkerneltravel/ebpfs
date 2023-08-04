@@ -18,8 +18,7 @@ export default function Home() {
                     {
                         State.isLogin()
                             ? <Button icon="icons8-github.svg" href="/account" text="查看账号"/>
-                            : <Button icon="icons8-github.svg" text="使用 Github 登录"
-                                      href="/api/oauth"/>
+                            : <Button icon="icons8-github.svg" text="使用 Github 登录" href="/api/oauth"/>
                     }
                 </div>
             </div>

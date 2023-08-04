@@ -12,10 +12,11 @@ export default function RepositoryPage() {
 
     if (id && !result) {
         fetch('/api/repository?id=' + id)
-            .then(result => result.json() as Promise<Repository>)
-            .then(data => setResult(data));
-
-        console.log(result);
+            .then(result => result.json() as Promise<Repository[]>)
+            .then(data => {
+                if (data.length === 0) return;
+                setResult(data[0]);
+            });
     }
 
     return (
