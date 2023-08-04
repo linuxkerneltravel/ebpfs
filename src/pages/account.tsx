@@ -16,14 +16,6 @@ interface Response {
 }
 
 export default function AccountPage() {
-    function getGithubAuthorizeUrl() {
-        const githubClientID = process.env.GITHUB_OAUTH_CLIENT_ID;
-        const state = crypto.randomUUID();
-        const baseUrl = process.env.BASE_URL;
-
-        return `https://github.com/login/oauth/authorize?client_id=${githubClientID}&state=${state}&redirect_uri=${baseUrl}/login`;
-    }
-
     const token = State.token;
     // 不要在任意 return 后使用 useState，因为这会导致每次渲染都会重置 state
     const [result, setResult] = useState<Response>();
@@ -35,8 +27,7 @@ export default function AccountPage() {
                 <Navbar/>
                 <div className="min-h-screen w-full backdrop-blur-2xl flex flex-col gap-2 items-center justify-center">
                     <div className="mt-2">
-                        <Button icon="icons8-github.svg" text="使用 Github 登录"
-                                onclick={() => window.location.href = getGithubAuthorizeUrl()}/>
+                        <Button icon="icons8-github.svg" text="使用 Github 登录" href="/api/oauth"/>
                     </div>
                 </div>
             </main>
