@@ -1,6 +1,6 @@
 import {Component} from "react";
 import Input from "@/pages/components/Input";
-import {useRouter, withRouter} from "next/router";
+import {withRouter} from "next/router";
 import {WithRouterProps} from "next/dist/client/with-router";
 
 
@@ -18,7 +18,7 @@ class Searchbar extends Component<SearchbarProps> {
                 <Input
                     onChange={(value) => {
                     }}
-                    onEnterPress={(value) => useRouter().push("/search?query=" + value)}
+                    onEnterPress={(value) => this.props.router.push("/search?query=" + value)}
                     placeholder={this.props.placeholder}
                     height={this.props.height}
                     width={this.props.width}

@@ -9,7 +9,7 @@ export default function Login() {
     useEffect(() => {
         if (typeof window !== "undefined") {
             const {code, state} = router.query;
-            console.log(code, state);
+
             if (typeof code === "string" && typeof state === "string") {
                 // POST /api/login
                 fetch(`/api/login?code=${code}&state=${state}`)
@@ -17,10 +17,13 @@ export default function Login() {
                     .then(res => {
                         State.token = res.token;
                         State.account = res.account;
+
+                        router.push("/").then(ignore => {
+                        });
                     });
             }
         }
-    }, [router]);
+    }, []);
 
     return (
         <main className={`flex min-h-screen flex-col bg-fixed bg-cover bg-center`}>
