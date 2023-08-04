@@ -43,7 +43,10 @@ export class State {
     }
 
     public static isLogin(): boolean {
-        return State.token !== undefined && State.account !== undefined;
+        return State.token !== undefined &&
+            State.token !== null &&
+            State.account !== undefined &&
+            State.account !== null;
     }
 }
 
