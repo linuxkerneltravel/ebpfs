@@ -7,7 +7,21 @@ import DatabaseService from "@/services/database";
 import SearchService from "@/services/search";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
-    if (req.method === 'POST') {
+    if (req.method === 'GET') {
+        const {id} = req.query;
+
+        if (id === null || id === '') {
+            res.status(400).json(new Message(400, 'repository is invalid.', null));
+            return;
+        }
+
+        const repositories = new DatabaseService();
+        const repo = await repositories.readRepository(id as string);
+
+        res.status(200).json(new Message(200, 'OK', {
+            repository: repo
+        }));
+    } else if (req.method === 'POST') {
         // 根据 Token 获取账号 ID
         const header = req.headers['Authorization'];
 
@@ -49,12 +63,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         const algoliaAPIKey = process.env.ALGOLIA_API_KEY;
 
         if (!algoliaApplicationID) {
-            res.status(500).json({error: 'ALGOLIA_APPLICATION_ID is not set'});
+            res.status(500).json(new Message(500, 'ALGOLIA_APPLICATION_ID is not set', null));
             return;
         }
 
         if (!algoliaAPIKey) {
-            res.status(500).json({error: 'ALGOLIA_API_KEY is not set'});
+            res.status(500).json(new Message(500, 'ALGOLIA_API_KEY is not set', null));
             return;
         }
 
@@ -70,6 +84,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             tags: repo.tags
         });
 
-        res.status(200).json({})
+        res.status(200).json(new Message(200, 'OK', repo));
     } else res.status(400).json(new Message(400, 'request method not match.', null));
 }

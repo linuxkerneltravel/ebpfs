@@ -5,6 +5,14 @@ import {State} from "@/pages/_app";
 
 const inter = Inter({subsets: ['latin']})
 
+function getGithubAuthorizeUrl() {
+    const githubClientID = process.env.GITHUB_OAUTH_CLIENT_ID;
+    const state = crypto.randomUUID();
+    const baseUrl = process.env.BASE_URL;
+
+    return `https://github.com/login/oauth/authorize?client_id=${githubClientID}&state=${state}&redirect_uri=${baseUrl}/login`;
+}
+
 export default function Home() {
     return (
         <main style={{backgroundImage: `url("https://i.im.ge/2023/07/17/5jrzzK.F0ci1uZakAAukOL.jpg")`}}
@@ -18,8 +26,8 @@ export default function Home() {
                     {
                         State.isLogin()
                             ? <Button icon="icons8-github.svg" href="/account" text="查看账号"/>
-                            : <Button icon="icons8-github.svg" href={State.getGithubAuthorizeUrl()}
-                                      text="使用 Github 登录"/>
+                            : <Button icon="icons8-github.svg" text="使用 Github 登录"
+                                      onclick={() => window.location.href = getGithubAuthorizeUrl()}/>
                     }
                 </div>
             </div>
