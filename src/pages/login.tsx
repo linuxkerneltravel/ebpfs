@@ -15,8 +15,7 @@ export default function Login() {
                 fetch(`/api/login?code=${code}&state=${state}`)
                     .then(res => res.json())
                     .then(res => {
-                        State.token = res.token;
-                        State.account = res.account;
+                        State.save(res.token, res.account);
 
                         router.push("/").then(ignore => {
                         });
