@@ -131,3 +131,5 @@ dist
 
 # Jetbrains IDE dir
 .idea/
+.vercel
+.env*.local

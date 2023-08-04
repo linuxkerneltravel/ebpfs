@@ -15,15 +15,15 @@ interface Response {
     repositories: Repository[];
 }
 
-function getGithubAuthorizeUrl() {
-    const githubClientID = process.env.GITHUB_OAUTH_CLIENT_ID;
-    const state = crypto.randomUUID();
-    const baseUrl = process.env.BASE_URL;
-
-    return `https://github.com/login/oauth/authorize?client_id=${githubClientID}&state=${state}&redirect_uri=${baseUrl}/login`;
-}
-
 export default function AccountPage() {
+    function getGithubAuthorizeUrl() {
+        const githubClientID = process.env.GITHUB_OAUTH_CLIENT_ID;
+        const state = crypto.randomUUID();
+        const baseUrl = process.env.BASE_URL;
+
+        return `https://github.com/login/oauth/authorize?client_id=${githubClientID}&state=${state}&redirect_uri=${baseUrl}/login`;
+    }
+
     const token = State.token;
     // 不要在任意 return 后使用 useState，因为这会导致每次渲染都会重置 state
     const [result, setResult] = useState<Response>();
