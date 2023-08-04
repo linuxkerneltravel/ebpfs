@@ -5,7 +5,8 @@ import {WithRouterProps} from "next/dist/client/with-router";
 interface ButtonProps extends WithRouterProps {
     text: string;
     icon: string;
-    href: string;
+    href?: string;
+    onclick?: () => void;
 }
 
 class Button extends Component<ButtonProps> {
@@ -18,7 +19,10 @@ class Button extends Component<ButtonProps> {
                     borderRadius: "8px",
                     backgroundColor: "#24282f"
                 }}
-                onClick={() => this.props.router.push(this.props.href)}>
+                onClick={() => {
+                    this.props.onclick && this.props.onclick();
+                    this.props.href && this.props.router.push(this.props.href);
+                }}>
                 <a className="flex flex-row justify-center items-center"
                    style={{padding: "20px"}}>
                     <img alt="github login" src={this.props.icon} style={{height: "32px", width: "32px"}}/>

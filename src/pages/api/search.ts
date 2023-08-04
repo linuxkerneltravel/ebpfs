@@ -7,11 +7,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         const {query} = req.query;
 
         if (!query) {
-            res.status(400).json({error: 'Query is empty'});
+            res.status(400).json(new Message(400, 'Query is not set', null));
             return;
         }
         if (typeof query !== 'string') {
-            res.status(400).json({error: 'Query is not a string'});
+            res.status(400).json(new Message(400, 'Query is not string', null));
             return;
         }
 
@@ -19,12 +19,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         const algoliaAPIKey = process.env.ALGOLIA_API_KEY;
 
         if (!algoliaApplicationID) {
-            res.status(500).json({error: 'ALGOLIA_APPLICATION_ID is not set'});
+            res.status(500).json(new Message(500, 'ALGOLIA_APPLICATION_ID is not set', null));
             return;
         }
 
         if (!algoliaAPIKey) {
-            res.status(500).json({error: 'ALGOLIA_API_KEY is not set'});
+            res.status(500).json(new Message(500, 'ALGOLIA_API_KEY is not set', null));
             return;
         }
 

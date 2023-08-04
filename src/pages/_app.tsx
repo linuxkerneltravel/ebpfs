@@ -5,19 +5,14 @@ import {Account} from "@/common/account";
 import {withRouter} from "next/router";
 
 export class State {
+    // TODO: 从 localStorage 中读取 token 和 account
+    // TODO: 清理 localStorage 中的 token 和 account
+
     public static token: Token | null = null;
     public static account: Account | null = null;
 
     public static isLogin(): boolean {
         return State.token !== null;
-    }
-
-    public static getGithubAuthorizeUrl() {
-        const githubClientID = process.env.GITHUB_OAUTH_CLIENT_ID;
-        const state = crypto.randomUUID();
-        const baseUrl = process.env.BASE_URL;
-
-        return `https://github.com/login/oauth/authorize?client_id=${githubClientID}&state=${state}&redirect_uri=${baseUrl}/login`;
     }
 }
 

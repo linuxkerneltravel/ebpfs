@@ -41,7 +41,7 @@ export default function Search() {
                             <Row key=""
                                  title={`${index.organization}  / ${index.project}`}
                                  text={index.readme}
-                                 url={index.url}
+                                 url={`/repository?id=${index.id}`}
                             />
                         ))}
                         <p className="text-gray-400 text-xs">关键词 {query} 共 {result.length} 个结果</p>
