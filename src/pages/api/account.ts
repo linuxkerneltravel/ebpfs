@@ -8,7 +8,7 @@ import {AccountType} from "@/data/account";
 export default function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
     if (req.method === 'GET') {
         // 查询 Token
-        const header = req.headers['Authorization'];
+        const header = req.headers['authorization'];
 
         if (header === undefined || header === null) {
             res.status(400).json(new Message(400, 'token is invalid.', null));

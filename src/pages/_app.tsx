@@ -5,8 +5,11 @@ import {Account} from "@/common/account";
 import {withRouter} from "next/router";
 
 export class State {
+    public static token: Token | null = null;
+    public static account: Account | null = null;
+
     // 从 localStorage 中读取 token 和 account
-    constructor() {
+    public static load() {
         if (typeof window !== "undefined") {
             const token = localStorage.getItem("token");
             const account = localStorage.getItem("account");
@@ -27,9 +30,6 @@ export class State {
         State.token = null;
         State.account = null;
     }
-
-    public static token: Token | null = null;
-    public static account: Account | null = null;
 
     // 写入 localStorage
     public static save(token: Token, account: Account) {

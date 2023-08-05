@@ -4,7 +4,7 @@ import {WithRouterProps} from "next/dist/client/with-router";
 
 interface ButtonProps extends WithRouterProps {
     text: string;
-    icon: string;
+    icon?: string;
     href?: string;
     onclick?: () => void;
 }
@@ -25,7 +25,10 @@ class Button extends Component<ButtonProps> {
                 }}>
                 <a className="flex flex-row justify-center items-center"
                    style={{padding: "20px"}}>
-                    <img alt="github login" src={this.props.icon} style={{height: "32px", width: "32px"}}/>
+                    {
+                        this.props.icon &&
+                        <img alt="github login" src={this.props.icon} style={{height: "32px", width: "32px"}}/>
+                    }
                     <p className={`text-white text-sm`}>{this.props.text}</p>
                 </a>
             </div>
