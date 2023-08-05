@@ -24,12 +24,14 @@ export default function RepositoryPage() {
         breaks: false,      // 允许回车换行
     });
 
-    fetch(result?.readme as string)
-        .then(result => result.text())
-        .then(data => {
-            let dom = document.getElementById('marked');
-            if (dom) dom.innerHTML = marked(data);
-        });
+    if (typeof window !== "undefined" && result?.readme) {
+        fetch(result.readme)
+            .then(result => result.text())
+            .then(data => {
+                let dom = document.getElementById('marked');
+                if (dom) dom.innerHTML = marked(data);
+            });
+    }
 
     if (id && !result) {
         fetch('/api/repository?id=' + id)
