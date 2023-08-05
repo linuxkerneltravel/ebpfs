@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         }));
     } else if (req.method === 'POST') {
         // 根据 Token 获取账号 ID
-        const header = req.headers['Authorization'];
+        const header = req.headers['authorization'];
 
         if (header === undefined || header === null) {
             res.status(400).json(new Message(400, 'token is invalid.', null));
