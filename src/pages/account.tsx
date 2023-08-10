@@ -37,6 +37,15 @@ export default function AccountPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const copy = () => {
+        const input = document.createElement('input');
+        input.value = token.token;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+    };
+
     return (
         <main style={{backgroundImage: `url("https://i.im.ge/2023/07/17/5jrzzK.F0ci1uZakAAukOL.jpg")`}}
               className={`flex min-h-screen flex-col ${inter.className} bg-fixed bg-cover bg-center`}>
@@ -51,6 +60,7 @@ export default function AccountPage() {
                                          className="rounded-full" style={{height: '64px', width: '64px'}} alt=""/>
                                 </div>
                                 <Button text="添加一个新的包" onclick={() => router.push("/upload")}/>
+                                <Button text="复制当前账号 TOKEN" onclick={copy}/>
                                 <Button text="退出登录" onclick={() => {
                                     State.clear();
                                     router.push("/").then(ignore => {

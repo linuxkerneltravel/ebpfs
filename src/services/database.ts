@@ -59,6 +59,7 @@ export default class DatabaseService<T> {
             .selectFrom('account')
             .where('openid', '=', openid)
             .where('type', '=', type)
+            .selectAll()
             .execute();
     }
 
@@ -96,6 +97,7 @@ export default class DatabaseService<T> {
         return await this.db
             .selectFrom('repository')
             .where('id', '=', id)
+            .selectAll()
             .execute();
     }
 
@@ -103,6 +105,7 @@ export default class DatabaseService<T> {
         return await this.db
             .selectFrom('repository')
             .where('account', '=', account)
+            .selectAll()
             .execute();
     }
 

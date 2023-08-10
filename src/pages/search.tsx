@@ -40,7 +40,7 @@ export default function Search() {
                         {result.map((index) => (
                             <Row key=""
                                  title={`${index.organization}  / ${index.project}`}
-                                 text={index.readme}
+                                 text={index.content}
                                  url={`/repository?id=${index.id}`}
                             />
                         ))}

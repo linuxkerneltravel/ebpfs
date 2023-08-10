@@ -19,13 +19,13 @@ export default function UploadPage() {
     // 提交仓库表单
     //
     // 组织
-    const [organizations, setOrganizations] = useState<string>('');
+    const [organization, setOrganization] = useState<string>('');
     // 项目
-    const [projects, setProjects] = useState<string>('');
+    const [project, setProject] = useState<string>('');
     // 版本
     const [version, setVersion] = useState<string>('');
     // 仓库
-    const [repositories, setRepositories] = useState<string>('');
+    const [repository, setRepository] = useState<string>('');
     // README 链接
     const [readme, setReadme] = useState<string>('');
     // 入口
@@ -46,10 +46,10 @@ export default function UploadPage() {
             },
             body: JSON.stringify({
                 update: new Date().getTime().toString(),
-                organizations: organizations,
-                project: projects,
+                organization: organization,
+                project: project,
                 version: version,
-                repository: repositories,
+                repository: repository,
                 readme: readme,
                 type: 'wasm',
                 entry: entry,
@@ -70,16 +70,16 @@ export default function UploadPage() {
                         <div className="bg-white flex flex-col flex-wrap gap-4 p-16 rounded-2xl"
                              style={{width: '480px'}}>
                             <p className="font-bold text-xl">提交一个仓库 / 更新仓库</p>
-                            <Input placeholder="组织" height="48px" width="350px" onChange={setOrganizations}
+                            <Input placeholder="组织" height="48px" width="350px" onChange={setOrganization}
                                    onEnterPress={() => {
                                    }}/>
-                            <Input placeholder="项目" height="48px" width="350px" onChange={setProjects}
+                            <Input placeholder="项目" height="48px" width="350px" onChange={setProject}
                                    onEnterPress={() => {
                                    }}/>
                             <Input placeholder="版本" height="48px" width="350px" onChange={setVersion}
                                    onEnterPress={() => {
                                    }}/>
-                            <Input placeholder="代码仓库" height="48px" width="350px" onChange={setRepositories}
+                            <Input placeholder="代码仓库" height="48px" width="350px" onChange={setRepository}
                                    onEnterPress={() => {
                                    }}/>
                             <Input placeholder="README 链接" height="48px" width="350px" onChange={setReadme}
