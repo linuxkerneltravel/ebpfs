@@ -50,10 +50,10 @@ export default function RepositoryPage() {
                      style={{height: '420px'}}>
                     <div id="icon">
                         <img src="favicon.ico" className="rounded-full" style={{height: '128px', width: '128px'}}
-                               alt="icon"/>
+                             alt="icon"/>
                     </div>
                     <div id="content" className="" style={{width: '70%'}}>
-                        <p className="text-4xl font-bold">lmp / bootstrap</p>
+                        <p className="text-4xl font-bold">{`${result?.organization} / ${result?.project}`}</p>
                         <div style={{height: '8px'}}/>
                         <p className="text-gray-400 text-base">{`创建者 ${result?.author.join(" ")}`}</p>
                         <p className="text-gray-400 text-base">{`创建于 ${result?.created}`}</p>

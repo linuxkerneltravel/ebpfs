@@ -18,9 +18,3 @@ export enum TokenType {
     OAUTH_TOKEN = "oauth_token",
     ACCOUNT_API_KEY = "account_api_key"
 }
-
-export enum ExpireTime {
-    MINUTE = 1000 * 1000 * 60,
-    DAY = 1000 * 1000 * 60 * 60 * 24,
-    WEEK = 1000 * 1000 * 60 * 60 * 24 * 7
-}

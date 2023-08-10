@@ -79,7 +79,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         }
 
         const search = new SearchService(algoliaApplicationID, algoliaAPIKey);
-
         const content = await fetch(repo.readme).then(async (response) => response.text());
 
         await search.upload({
@@ -87,7 +86,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             url: repo.repository,
             organization: repo.organization,
             project: repo.project,
-            readme: content,
+            // 字符数量限制为 5000 避免触发 algolia 的限制阈值
+            readme: content.length > 5000
+                ? content.substring(0, 5000).replace(/\n/g, "")
+                : content.replace(/\n/g, ""),
             author: repo.author,
             tags: repo.tags
         });

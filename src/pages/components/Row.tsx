@@ -9,6 +9,14 @@ interface RowProps extends WithRouterProps {
 }
 
 class Row extends Component<RowProps> {
+    static handleTextOverflow(text: string, max: number): string {
+        if (text.replace(/\n/g, "").length > max) {
+            return text.replace(/\n/g, "").substring(0, max) + "...";
+        } else {
+            return text.replace(/\n/g, "");
+        }
+    }
+
     render() {
         return (
             <div className="shadow-xl flex justify-center flex-col gap-4 p-4"
@@ -18,11 +26,11 @@ class Row extends Component<RowProps> {
                      borderRadius: "8px",
                      textOverflow: "ellipsis",
                      overflow: "hidden",
-                     whiteSpace: "nowrap",
+                     whiteSpace: "pre-wrap"
                  }}
                  onClick={e => this.props.router.push(this.props.url)}>
                 <p className="text-gray-900 text-lg font-bold">{this.props.title}</p>
-                <p className="text-gray-600 text-sm">{this.props.text}</p>
+                <p className="text-gray-600 text-sm">{Row.handleTextOverflow(this.props.text, 500)}</p>
             </div>
         );
     }

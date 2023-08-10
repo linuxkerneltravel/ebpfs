@@ -19,6 +19,7 @@ export default class SearchService {
         const client = algoliasearch(this.applicationId, this.apiKey);
         const index = client.initIndex('docs');
         const save = {
+            objectID: id,
             id: id,
             url: url,
             organization: organization,
