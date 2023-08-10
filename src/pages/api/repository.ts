@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         }
 
         const repositories = new DatabaseService();
-        const repo = await repositories.readRepository(id as string);
+        const repo = await repositories.readRepository(id as string) as Repository[];
 
         res.status(200).json(new Message(200, 'OK', {
             repository: repo
@@ -86,8 +86,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             url: repo.repository,
             organization: repo.organization,
             project: repo.project,
+            readme: repo.readme,
             // 字符数量限制为 5000 避免触发 algolia 的限制阈值
-            readme: content.length > 5000
+            content: content.length > 5000
                 ? content.substring(0, 5000).replace(/\n/g, "")
                 : content.replace(/\n/g, ""),
             author: repo.author,

@@ -5,8 +5,13 @@ import {useState} from "react";
 import {Repository} from "@/common/repository";
 import {State} from "@/pages/_app";
 import {marked} from "marked";
+import Message from "@/common/message";
 
 const inter = Inter({subsets: ['latin']});
+
+interface RepositoryData {
+    repository: Repository[]
+}
 
 export default function RepositoryPage() {
     (function () {
@@ -35,10 +40,13 @@ export default function RepositoryPage() {
 
     if (id && !result) {
         fetch('/api/repository?id=' + id)
-            .then(result => result.json() as Promise<Repository[]>)
+            .then(result => result.json() as Promise<Message<RepositoryData>>)
             .then(data => {
-                if (data.length === 0) return;
-                setResult(data[0]);
+                console.log(data);
+
+                if (data.status === 200 && data.data.repository.length > 0) {
+                    setResult(data.data.repository[0]);
+                }
             });
     }
 
@@ -55,16 +63,14 @@ export default function RepositoryPage() {
                     <div id="content" className="" style={{width: '70%'}}>
                         <p className="text-4xl font-bold">{`${result?.organization} / ${result?.project}`}</p>
                         <div style={{height: '8px'}}/>
-                        <p className="text-gray-400 text-base">{`创建者 ${result?.author.join(" ")}`}</p>
-                        <p className="text-gray-400 text-base">{`创建于 ${result?.created}`}</p>
+                        <p className="text-gray-400 text-base">{`创建者 ${result?.author.slice(2, result?.author.length - 2)}`}</p>
+                        <p className="text-gray-400 text-base">{`创建于 ${new Date((result !== undefined && result.created !== undefined) ? parseInt(result.created) : new Date().getTime())}`}</p>
                         <p className="text-gray-400 text-base">{`代码仓库 ${result?.repository}`}</p>
                         <p className="text-gray-400 text-base">{`版本 ${result?.version}`}</p>
                         <div style={{height: '24px'}}/>
-                        <p className="text-sm">{`${result?.readme}`}</p>
-                        <div style={{height: '24px'}}/>
                         <div className="flex justify-center items-center rounded-16 bg-gray-50 border-gray-900"
                              style={{width: '220px', minHeight: '48px'}}>
-                            <p>`ecli run ${result?.organization}/${result?.project}`</p>
+                            <p>{`ecli run ${result?.organization}/${result?.project}`}</p>
                         </div>
                     </div>
                 </div>
@@ -77,7 +83,14 @@ export default function RepositoryPage() {
                     </div>
                 </div>
                 <div className="flex justify-center items-center mt-12">
-                    <div id="marked" className="bg-white p-16 rounded-xl" style={{width: '70%'}}/>
+                    {
+                        result
+                            ? <div id="marked" className="bg-white p-16 rounded-xl" style={{width: '70%'}}/>
+                            : <div className="bg-white p-16 rounded-xl flex justify-center items-center"
+                                   style={{width: '70%'}}>
+                                <p className="text-2xl font-bold">该仓库未收录</p>
+                            </div>
+                    }
                 </div>
             </div>
         </main>

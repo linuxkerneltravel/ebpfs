@@ -15,7 +15,7 @@ export default class SearchService {
         return index.search(query);
     }
 
-    async upload({id, url, organization, project, readme, author, tags}: Index) {
+    async upload({id, url, organization, project, readme, content, author, tags}: Index) {
         const client = algoliasearch(this.applicationId, this.apiKey);
         const index = client.initIndex('docs');
         const save = {
@@ -25,6 +25,7 @@ export default class SearchService {
             organization: organization,
             project: project,
             readme: readme,
+            content: content,
             author: author,
             tags: tags
         }
