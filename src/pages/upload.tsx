@@ -99,7 +99,7 @@ export default function UploadPage() {
                             <Input placeholder="标签（使用 , 分隔多个标签）" height="48px" width="350px"
                                    onChange={(str) => setTags(str.split(","))} onEnterPress={() => {
                             }}/>
-                            <Button text="提交"/>
+                            <Button text="提交" onclick={submit}/>
                         </div>
                     </div>
                 }
