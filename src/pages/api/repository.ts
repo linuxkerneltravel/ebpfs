@@ -32,7 +32,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
         const tokens = new CacheService<Token>();
         const repositories = new DatabaseService();
-        const token = tokens.get(header as string) as Token;
+
+        const token = await tokens.get(header as string) as Token;
+
+        if (token === undefined || token === null) {
+            res.status(400).json(new Message(400, 'token is invalid.', null));
+            return;
+        }
 
         // 解构 form-data
         const {
