@@ -5,6 +5,7 @@ import {useState} from "react";
 import {Repository} from "@/common/repository";
 import {State} from "@/pages/_app";
 import {marked} from "marked";
+import Image from "next/image";
 
 const inter = Inter({subsets: ['latin']});
 
@@ -49,8 +50,8 @@ export default function RepositoryPage() {
                 <div className="w-full bg-white flex flex-row justify-center items-center gap-16"
                      style={{height: '420px'}}>
                     <div id="icon">
-                        <img src="favicon.ico" className="rounded-full" style={{height: '128px', width: '128px'}}
-                             alt="icon"/>
+                        <Image src="favicon.ico" className="rounded-full" style={{height: '128px', width: '128px'}}
+                               alt="icon"/>
                     </div>
                     <div id="content" className="" style={{width: '70%'}}>
                         <p className="text-4xl font-bold">lmp / bootstrap</p>

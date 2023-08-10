@@ -7,7 +7,8 @@ import {Repository} from "@/common/repository";
 import {useEffect, useState} from "react";
 import Message from "@/common/message";
 import {Token} from "@/common/token";
-import {router} from "next/client";
+import Image from "next/image";
+import {useRouter} from "next/router";
 
 const inter = Inter({subsets: ['latin']})
 
@@ -22,6 +23,7 @@ export default function AccountPage() {
         State.load()
     }());
 
+    const router = useRouter();
     const token = State.token as Token;
 
     // 不要在任意 return 后使用 useState，因为这会导致每次渲染都会重置 state
@@ -33,6 +35,7 @@ export default function AccountPage() {
         fetch('/api/account', {headers: {'Authorization': token.token}})
             .then(result => result.json() as Promise<Message<Response>>)
             .then(data => setResult(data.data));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -45,8 +48,8 @@ export default function AccountPage() {
                         ? <div>
                             <div className="bg-white flex flex-col gap-4 p-16 rounded-2xl" style={{width: '320px'}}>
                                 <div className="flex flex-col justify-center items-center">
-                                    <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
-                                         className="rounded-full" style={{height: '64px', width: '64px'}} alt=""/>
+                                    <Image src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+                                           className="rounded-full" style={{height: '64px', width: '64px'}} alt=""/>
                                 </div>
                                 <Button text="添加一个新的包" onclick={() => router.push("/upload")}/>
                                 <Button text="退出登录" onclick={() => {

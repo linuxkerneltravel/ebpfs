@@ -4,7 +4,7 @@ import {useState} from "react";
 import Button from "@/pages/components/Button";
 import {Inter} from "next/font/google";
 import Input from "@/pages/components/Input";
-import {router} from "next/client";
+import {useRouter} from "next/router";
 
 const inter = Inter({subsets: ['latin']})
 
@@ -12,6 +12,8 @@ export default function UploadPage() {
     (function () {
         State.load()
     }());
+
+    const router = useRouter();
 
     //
     // 提交仓库表单
