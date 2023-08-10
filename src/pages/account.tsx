@@ -7,7 +7,6 @@ import {Repository} from "@/common/repository";
 import {useEffect, useState} from "react";
 import Message from "@/common/message";
 import {Token} from "@/common/token";
-import Image from "next/image";
 import {useRouter} from "next/router";
 
 const inter = Inter({subsets: ['latin']})
@@ -48,7 +47,7 @@ export default function AccountPage() {
                         ? <div>
                             <div className="bg-white flex flex-col gap-4 p-16 rounded-2xl" style={{width: '320px'}}>
                                 <div className="flex flex-col justify-center items-center">
-                                    <Image src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+                                    <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
                                            className="rounded-full" style={{height: '64px', width: '64px'}} alt=""/>
                                 </div>
                                 <Button text="添加一个新的包" onclick={() => router.push("/upload")}/>

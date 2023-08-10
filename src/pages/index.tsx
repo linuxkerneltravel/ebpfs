@@ -2,7 +2,6 @@ import {Inter} from 'next/font/google'
 import Navbar from "@/pages/components/Navbar";
 import Button from "@/pages/components/Button";
 import {State} from "@/pages/_app";
-import Image from "next/image";
 
 const inter = Inter({subsets: ['latin']})
 
@@ -13,7 +12,7 @@ export default function Home() {
             <Navbar
                 src={State.account?.avatar ? State.account.avatar : `https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png`}/>
             <div className="min-h-screen w-full backdrop-blur-2xl flex flex-col gap-2 items-center justify-center">
-                <Image src="favicon.ico" alt="" style={{height: "72px"}}/>
+                <img src="favicon.ico" alt="" style={{height: "72px"}} width="72"/>
                 <p className="text-3xl text-gray-600">欢迎使用 eBPF Hub</p>
                 <p className="text-xl text-gray-600">搜索、探索 eBPF 程序</p>
                 <div className="mt-2">

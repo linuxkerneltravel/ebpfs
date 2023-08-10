@@ -5,7 +5,6 @@ import {useState} from "react";
 import {Repository} from "@/common/repository";
 import {State} from "@/pages/_app";
 import {marked} from "marked";
-import Image from "next/image";
 
 const inter = Inter({subsets: ['latin']});
 
@@ -50,14 +49,14 @@ export default function RepositoryPage() {
                 <div className="w-full bg-white flex flex-row justify-center items-center gap-16"
                      style={{height: '420px'}}>
                     <div id="icon">
-                        <Image src="favicon.ico" className="rounded-full" style={{height: '128px', width: '128px'}}
+                        <img src="favicon.ico" className="rounded-full" style={{height: '128px', width: '128px'}}
                                alt="icon"/>
                     </div>
                     <div id="content" className="" style={{width: '70%'}}>
                         <p className="text-4xl font-bold">lmp / bootstrap</p>
                         <div style={{height: '8px'}}/>
                         <p className="text-gray-400 text-base">{`创建者 ${result?.author.join(" ")}`}</p>
-                        <p className="text-gray-400 text-base">{`创建于 ${result?.create}`}</p>
+                        <p className="text-gray-400 text-base">{`创建于 ${result?.created}`}</p>
                         <p className="text-gray-400 text-base">{`代码仓库 ${result?.repository}`}</p>
                         <p className="text-gray-400 text-base">{`版本 ${result?.version}`}</p>
                         <div style={{height: '24px'}}/>

@@ -7,7 +7,7 @@ export class Token {
         // TOKEN 类型
         public type: TokenType,
         // 创建时间
-        public create: number,
+        public created: number,
         // 失效时间
         public expire: number
     ) {

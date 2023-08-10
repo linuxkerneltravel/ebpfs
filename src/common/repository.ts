@@ -5,7 +5,7 @@ export class Repository {
         // 属于哪个用户
         public account: string,
         // 创建时间
-        public create: string,
+        public created: string,
         // 更新时间
         public update: string,
         // 组织名
