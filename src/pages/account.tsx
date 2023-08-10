@@ -7,6 +7,7 @@ import {Repository} from "@/common/repository";
 import {useEffect, useState} from "react";
 import Message from "@/common/message";
 import {Token} from "@/common/token";
+import {router} from "next/client";
 
 const inter = Inter({subsets: ['latin']})
 
@@ -25,30 +26,6 @@ export default function AccountPage() {
 
     // 不要在任意 return 后使用 useState，因为这会导致每次渲染都会重置 state
     const [result, setResult] = useState<Response>();
-    // 更新时间
-    const [updateTime, setUpdateTime] = useState<string>('');
-    // 组织
-    const [organizations, setOrganizations] = useState<string>('');
-    // 项目
-    const [projects, setProjects] = useState<string>('');
-    // 版本
-    const [version, setVersion] = useState<string>('');
-    // 仓库
-    const [repositories, setRepositories] = useState<string>('');
-    // README 链接
-    const [readme, setReadme] = useState<string>('');
-    // 项目链接
-    const [project, setProject] = useState<string>('');
-    // 仓库类型
-    const [type, setType] = useState<string>('');
-    // 仓库地址
-    const [url, setUrl] = useState<string>('');
-    // 入口
-    const [entry, setEntry] = useState<string>('');
-    // 作者
-    const [author, setAuthor] = useState<string[]>([]);
-    // 标签
-    const [tags, setTags] = useState<string[]>([]);
 
     useEffect(() => {
         // 获取账号信息的逻辑
@@ -69,10 +46,14 @@ export default function AccountPage() {
                             <div className="bg-white flex flex-col gap-4 p-16 rounded-2xl" style={{width: '320px'}}>
                                 <div className="flex flex-col justify-center items-center">
                                     <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
-                                         className="rounded-full" style={{height: '64px', width: '64px'}}></img>
+                                         className="rounded-full" style={{height: '64px', width: '64px'}} alt=""/>
                                 </div>
-                                <Button text="添加一个新的包"/>
-                                <Button text="退出登录"/>
+                                <Button text="添加一个新的包" onclick={() => router.push("/upload")}/>
+                                <Button text="退出登录" onclick={() => {
+                                    State.clear();
+                                    router.push("/").then(ignore => {
+                                    })
+                                }}/>
                             </div>
                         </div>
                         : <div className="mt-2">
