@@ -16,6 +16,9 @@ class Row extends Component<RowProps> {
                      maxWidth: "680px",
                      height: "180px",
                      borderRadius: "8px",
+                     textOverflow: "ellipsis",
+                     overflow: "hidden",
+                     whiteSpace: "nowrap",
                  }}
                  onClick={e => this.props.router.push(this.props.url)}>
                 <p className="text-gray-900 text-lg font-bold">{this.props.title}</p>

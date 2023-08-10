@@ -79,7 +79,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             url: repo.repository,
             organization: repo.organization,
             project: repo.project,
-            readme: repo.readme,
+            readme: await fetch(repo.readme).then(async (response) => response.text()),
             author: repo.author,
             tags: repo.tags
         });
