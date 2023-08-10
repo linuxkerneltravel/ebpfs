@@ -5,11 +5,7 @@ export default class CacheService<T> {
         return kv.set(key, value);
     }
 
-    public expire(key: string, expire: number): Promise<0 | 1> {
-        return kv.expire(key, expire);
-    }
-
-    public get(key: string): T | {} {
-        return kv.get(key) as T | {};
+    public async get(key: string): Promise<T | null> {
+        return kv.get(key);
     }
 }

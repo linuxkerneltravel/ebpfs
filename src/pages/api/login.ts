@@ -2,7 +2,7 @@ import type {NextApiRequest, NextApiResponse} from 'next'
 import Message from "@/common/message";
 import DatabaseService from "@/services/database";
 import CacheService from "@/services/cache";
-import {ExpireTime, Token, TokenType} from "@/common/token";
+import {Token, TokenType} from "@/common/token";
 import {Account, AccountType} from "@/common/account";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
@@ -77,16 +77,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
         // 无论如何都返回用户信息和有效 Token
         const time = new Date().getTime();
+        const expire = new Date(time + 60 * 60 * 1000).getTime();
+
         const token = new Token(
             crypto.randomUUID(),
             account.id,
             TokenType.OAUTH_TOKEN,
             time,
-            time + ExpireTime.MINUTE * 30
+            expire
         );
 
         await tokens.set(token.token, token);
-        await tokens.expire(token.token, token.expire);
 
         res.status(200).json(new Message(200, 'success', {account: account, token: token, origin: userResJson}));
     } else {

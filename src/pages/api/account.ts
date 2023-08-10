@@ -5,7 +5,7 @@ import {Token} from "@/common/token";
 import DatabaseService from "@/services/database";
 import {AccountType} from "@/data/account";
 
-export default function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
     if (req.method === 'GET') {
         // 查询 Token
         const header = req.headers['authorization'];
@@ -16,7 +16,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
         }
 
         const tokens = new CacheService<Token>();
-        const token = tokens.get(header as string) as Token;
+        const token = await tokens.get(header as string) as Token;
 
         // 查询账号信息
         const accounts = new DatabaseService();
