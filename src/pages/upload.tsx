@@ -45,7 +45,7 @@ export default function UploadPage() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                update: new Date().toString(),
+                update: new Date().getTime().toString(),
                 organizations: organizations,
                 project: projects,
                 version: version,
