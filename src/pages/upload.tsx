@@ -18,8 +18,6 @@ export default function UploadPage() {
     //
     // 提交仓库表单
     //
-    // 更新时间
-    const [updateTime, setUpdateTime] = useState<string>('');
     // 组织
     const [organizations, setOrganizations] = useState<string>('');
     // 项目
@@ -47,7 +45,7 @@ export default function UploadPage() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                update: updateTime,
+                update: new Date().toString(),
                 organizations: organizations,
                 project: projects,
                 version: version,
@@ -72,9 +70,6 @@ export default function UploadPage() {
                         <div className="bg-white flex flex-col flex-wrap gap-4 p-16 rounded-2xl"
                              style={{width: '480px'}}>
                             <p className="font-bold text-xl">提交一个仓库 / 更新仓库</p>
-                            <Input placeholder="更新时间" height="48px" width="350px" onChange={setUpdateTime}
-                                   onEnterPress={() => {
-                                   }}/>
                             <Input placeholder="组织" height="48px" width="350px" onChange={setOrganizations}
                                    onEnterPress={() => {
                                    }}/>

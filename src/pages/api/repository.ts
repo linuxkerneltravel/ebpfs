@@ -74,12 +74,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
         const search = new SearchService(algoliaApplicationID, algoliaAPIKey);
 
+        const content = await fetch(repo.readme).then(async (response) => response.text());
+
         await search.upload({
             id: repo.id,
             url: repo.repository,
             organization: repo.organization,
             project: repo.project,
-            readme: await fetch(repo.readme).then(async (response) => response.text()),
+            readme: content,
             author: repo.author,
             tags: repo.tags
         });

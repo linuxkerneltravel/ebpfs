@@ -21,12 +21,17 @@ export default class DatabaseService<T> {
             // 初始化表
             await this.db.schema.createTable('repository')
                 .addColumn('id', 'text', col => col.primaryKey())
-                .addColumn('name', 'text')
-                .addColumn('description', 'text')
-                .addColumn('keywords', 'text')
-                .addColumn('tags', 'text')
+                .addColumn('account', 'text')
+                .addColumn('update', 'text')
+                .addColumn('organization', 'text')
+                .addColumn('project', 'text')
+                .addColumn('version', 'text')
                 .addColumn('readme', 'text')
+                .addColumn('type', 'text')
+                .addColumn('repository', 'text')
+                .addColumn('entry', 'text')
                 .addColumn('author', 'text')
+                .addColumn('tags', 'text')
                 .addColumn('created', 'bigint')
                 .execute();
 
@@ -74,14 +79,14 @@ export default class DatabaseService<T> {
 
     public async createRepository(
         {
-            id, account, create, update, organization, project, version,
+            id, account, created, update, organization, project, version,
             readme, type, repository, entry, author, tags
         }: Repository
     ) {
         return await this.db
             .insertInto('repository')
             .values({
-                id, account, create, update, organization, project, version,
+                id, account, created, update, organization, project, version,
                 readme, type, repository, entry, author, tags
             })
             .execute();
@@ -104,14 +109,14 @@ export default class DatabaseService<T> {
     public async updateRepository(
         queryId: string,
         {
-            id, account, create, update, organization, project, version,
+            id, account, created, update, organization, project, version,
             readme, type, repository, entry, author, tags
         }: Repository
     ) {
         return await this.db
             .updateTable('repository')
             .set({
-                id, account, create, update, organization, project, version,
+                id, account, created, update, organization, project, version,
                 readme, type, repository, entry, author, tags
             })
             .where('id', '=', queryId)

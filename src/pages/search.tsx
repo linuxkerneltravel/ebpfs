@@ -6,7 +6,6 @@ import {Index} from "@/common";
 import Message from "@/common/message";
 import Row from "@/pages/components/Row";
 import Loading from "@/pages/components/Loading";
-import Image from "next/image";
 
 const inter = Inter({subsets: ['latin']})
 
@@ -28,7 +27,7 @@ export default function Search() {
                     <Searchbar placeholder="开始探索 eBPF Hub 吧！" width="480px" height="42px" indent="16px"/>
                     <p className="text-gray-400 text-xs">按下 Enter 键进行搜索</p>
                 </div>
-                {(!query) && <Image src="https://github.com/images/modules/search/home-desktop-light.webp" alt=""/>}
+                {(!query) && <img src="https://github.com/images/modules/search/home-desktop-light.webp" alt=""/>}
                 {
                     (query && !result) &&
                     <div className="flex justify-center items-center">
