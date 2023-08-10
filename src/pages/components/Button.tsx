@@ -1,6 +1,7 @@
 import {Component} from "react";
 import {withRouter} from "next/router";
 import {WithRouterProps} from "next/dist/client/with-router";
+import Image from "next/image"
 
 interface ButtonProps extends WithRouterProps {
     text: string;
@@ -27,7 +28,7 @@ class Button extends Component<ButtonProps> {
                    style={{padding: "20px"}}>
                     {
                         this.props.icon &&
-                        <img alt="github login" src={this.props.icon} style={{height: "32px", width: "32px"}}/>
+                        <Image alt="github login" src={this.props.icon} style={{height: "32px", width: "32px"}}/>
                     }
                     <p className={`text-white text-sm`}>{this.props.text}</p>
                 </a>
