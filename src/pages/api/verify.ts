@@ -12,6 +12,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         const emailSmtpPort = process.env.EMAIL_SMTP_PORT;
         const emailSmtpSecure = process.env.EMAIL_SMTP_SECURE;
 
+        const {username, password} = req.query;
+
+        if (username === null || !username) {
+            res.status(400).json(new Message(400, 'username is invalid.', null));
+            return;
+        }
+
+        if (password === null || !password) {
+            res.status(400).json(new Message(400, 'password is invalid.', null));
+            return;
+        }
+
         if (emailSender === null || !emailSender) {
             res.status(400).json(new Message(400, 'emailSender is invalid.', null));
             return;
@@ -65,6 +77,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             Date.now(),
             Date.now() + 1000 * 60 * 10));
 
-        res.redirect('/verify');
+        res.redirect(`/verify?email=${email}&password=${password}`);
     } else res.status(400).json(new Message(400, 'request method not match.', null));
 }

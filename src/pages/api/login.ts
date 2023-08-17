@@ -186,7 +186,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             const account = await accounts.readAccount(email as string, AccountType.EMAIL);
 
             if (account.length === 0) {
-                res.status(400).json(new Message(400, 'account not found.', null));
+                // 账号不存在 携带 email 和 password 注册账号
+
+                res.redirect(`/api/verify?email=${email}&password=${password}`);
                 return;
             }
 

@@ -56,10 +56,11 @@ export default class DatabaseService<T> {
             .execute();
     }
 
-    public async readAccount(openid: string, type: AccountType) {
+    public async readAccount(query: string, type: AccountType) {
         return await this.db
             .selectFrom('account')
-            .where('openid', '=', openid)
+            // 按照类型查询 openid（目前就 Github 一种） 或者 email
+            .where(type === AccountType.GITHUB ? 'openid' : 'email', '=', query)
             .where('type', '=', type)
             .selectAll()
             .execute();
