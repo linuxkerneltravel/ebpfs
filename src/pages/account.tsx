@@ -8,6 +8,7 @@ import {useEffect, useState} from "react";
 import Message from "@/common/message";
 import {Token} from "@/common/token";
 import {useRouter} from "next/router";
+import Input from "@/pages/components/Input";
 
 const inter = Inter({subsets: ['latin']})
 
@@ -46,6 +47,27 @@ export default function AccountPage() {
         document.body.removeChild(input);
     };
 
+
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+
+    const login = () => {
+        fetch('/login',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password,
+                })
+            })
+            .then(result => result.json())
+            .then(() => router.push("/account")
+                .then(ignore => 0));
+    }
+
     return (
         <main style={{backgroundImage: `url("https://i.im.ge/2023/07/17/5jrzzK.F0ci1uZakAAukOL.jpg")`}}
               className={`flex min-h-screen flex-col ${inter.className} bg-fixed bg-cover bg-center`}>
@@ -69,7 +91,18 @@ export default function AccountPage() {
                             </div>
                         </div>
                         : <div className="mt-2">
-                            <Button icon="icons8-github.svg" text="使用 Github 登录" href="/api/oauth"/>
+                            <div className="bg-white flex flex-col flex-wrap gap-4 p-16 rounded-2xl"
+                                 style={{width: '480px'}}>
+                                <p className="font-bold text-xl"></p>
+                                <Input placeholder="邮箱（未注册将自动注册）" height="48px" width="350px" onChange={setEmail}
+                                       onEnterPress={() => {
+                                       }}/>
+                                <Input placeholder="密码" height="48px" width="350px" onChange={setPassword}
+                                       onEnterPress={() => {
+                                       }}/>
+                                <Button text="登录" onclick={login}/>
+                                <Button icon="icons8-github.svg" text="使用 Github 登录" href="/api/oauth"/>
+                            </div>
                         </div>
                 }
             </div>
