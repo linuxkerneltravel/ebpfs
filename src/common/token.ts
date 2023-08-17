@@ -16,5 +16,6 @@ export class Token {
 
 export enum TokenType {
     OAUTH_TOKEN = "oauth_token",
-    ACCOUNT_API_KEY = "account_api_key"
+    ACCOUNT_API_KEY = "account_api_key",
+    EMAIL_VERIFY_CODE = "email_verify_code"
 }

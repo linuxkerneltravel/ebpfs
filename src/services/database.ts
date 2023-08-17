@@ -40,6 +40,8 @@ export default class DatabaseService<T> {
                 .addColumn('openid', 'text')
                 .addColumn('nickname', 'text')
                 .addColumn('avatar', 'text')
+                .addColumn('email', 'text')
+                .addColumn('password', 'text')
                 .addColumn('type', 'text')
                 .addColumn('created', 'bigint')
                 .execute();
@@ -47,10 +49,10 @@ export default class DatabaseService<T> {
         }
     }
 
-    public async createAccount({id, openid, nickname, avatar, type, created}: Account) {
+    public async createAccount({id, openid, nickname, avatar, email, password, type, created}: Account) {
         return await this.db
             .insertInto('account')
-            .values({id, openid, nickname, avatar, type, created})
+            .values({id, openid, nickname, avatar, email, password, type, created})
             .execute();
     }
 
