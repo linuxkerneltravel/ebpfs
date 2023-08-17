@@ -116,13 +116,102 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                 const verify = await tokens.get(code as string) as Token;
 
                 if (verify) {
-
+                    if (verify.expire < new Date().getTime()) {
+                        res.status(400).json(new Message(400, 'code is expired.', null));
+                        return;
+                    }
                 }
+
+                // 检查用户是否存在
+                const accounts = new DatabaseService<Account>();
+                const account = await accounts.readAccount(email as string, AccountType.EMAIL);
+
+                if (account.length === 0) {
+                    // 创建用户
+                    const acc = new Account(
+                        crypto.randomUUID(),
+                        null,
+                        // 截断邮箱 @ 前面的部分作为昵称
+                        email.toString().split('@')[0],
+                        "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
+                        password,
+                        email,
+                        AccountType.EMAIL,
+                        new Date().getTime()
+                    );
+
+                    await accounts.createAccount(acc);
+                    account[0] = acc;
+                }
+
+                // 创建 Token
+                const time = new Date().getTime();
+                const expire = new Date(time + 60 * 60 * 1000).getTime();
+
+                const t = new Token(
+                    crypto.randomUUID(),
+                    account[0].id,
+                    TokenType.ACCOUNT_API_KEY,
+                    time,
+                    expire
+                );
+
+                await tokens.set(t.token, t);
+                res.status(200).json(new Message(200, 'success', {account: account[0], token: t}));
+                return;
             }
 
             if (token && !code) {
+                // 修改密码
+                const accounts = new DatabaseService<Account>();
+                const account = await accounts.readAccount(token.belong, AccountType.EMAIL);
 
+                if (account.length === 0) {
+                    res.status(400).json(new Message(400, 'account not found.', null));
+                    return;
+                }
+
+                // 检查密码是否正确
+                if (account[0].email !== email) {
+                    res.status(400).json(new Message(400, 'email is incorrect.', null));
+                    return;
+                }
+
+                // 修改密码
+                account[0].password = password;
+
+                await accounts.updateAccount(account[0].id, account[0]);
+                res.status(200).json(new Message(200, 'success', null));
+                return;
             }
+
+            // 普通登录
+            // 检查用户是否存在
+            const accounts = new DatabaseService<Account>();
+            const account = await accounts.readAccount(email as string, AccountType.EMAIL);
+
+            if (account.length === 0) {
+                res.status(400).json(new Message(400, 'account not found.', null));
+                return;
+            }
+
+            // 检查密码是否正确
+            if (account[0].password !== password) {
+                res.status(400).json(new Message(400, 'password is incorrect.', null));
+                return;
+            }
+
+            // 创建 Token
+            const t = new Token(
+                crypto.randomUUID(),
+                account[0].id,
+                TokenType.ACCOUNT_API_KEY,
+                new Date().getTime(),
+                new Date(new Date().getTime() + 60 * 60 * 1000).getTime()
+            );
+
+            await tokens.set(t.token, t);
+            res.status(200).json(new Message(200, 'success', {account: account[0], token: t}));
         }
     } else {
         res.status(400).json(new Message(400, 'request method not match.', null));
