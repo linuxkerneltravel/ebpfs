@@ -1,5 +1,3 @@
-import * as crypto from 'crypto';
-
 export class Account {
     constructor(
         // 账号 ID

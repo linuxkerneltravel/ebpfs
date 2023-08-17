@@ -1,5 +1,4 @@
 import {State} from "@/pages/_app";
-import {Token} from "@/common/token";
 import {useState} from "react";
 import Button from "@/pages/components/Button";
 import {Inter} from "next/font/google";
@@ -14,13 +13,24 @@ export default function VerifyPage() {
     }());
 
     const router = useRouter();
-    const { email, password } = router.query;
+    const {email, password} = router.query;
 
     // 组织
     const [code, setCode] = useState<string>('');
 
     const submit = () => {
-        fetch('/api/repository')
+        fetch('/login',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password,
+                    code: code
+                })
+            })
             .then(result => result.json())
             .then(() => router.push("/account").then(ignore => 0));
     };
@@ -35,7 +45,8 @@ export default function VerifyPage() {
                              style={{width: '480px'}}>
                             <p className="font-bold text-xl">验证你的邮件地址</p>
                             <Input placeholder="验证码" height="48px" width="350px" onChange={setCode}
-                                   onEnterPress={() => {}}/>
+                                   onEnterPress={() => {
+                                   }}/>
                             <Button text="提交" onclick={submit}/>
                         </div>
                     </div>
