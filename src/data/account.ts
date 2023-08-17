@@ -1,4 +1,5 @@
 import {Generated} from "kysely";
+import crypto from "crypto";
 
 export class AccountTable {
     constructor(
@@ -19,6 +20,18 @@ export class AccountTable {
         // 创建时间
         public created: number,
     ) {
+    }
+
+    public static getPassword(password: string): string {
+        const hash = crypto.createHash('sha256');
+        hash.update(password);
+        return hash.digest('hex');
+    }
+
+    public static checkPassword(password: string, input: string): boolean {
+        const hash = crypto.createHash('sha256');
+        hash.update(input);
+        return password === hash.digest('hex');
     }
 }
 
