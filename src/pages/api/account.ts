@@ -23,6 +23,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         const id = token.belong;
         const account = accounts.readAccount(id, AccountType.GITHUB);
 
+        // 过滤 password 字段
+        // @ts-ignore
+        delete account.password;
+
         // 查询仓库列表
         const repositories = new DatabaseService();
         const repos = repositories.readRepositoryByAccount(id);

@@ -4,6 +4,7 @@ import DatabaseService from "@/services/database";
 import CacheService from "@/services/cache";
 import {Token, TokenType} from "@/common/token";
 import {Account, AccountType} from "@/common/account";
+import {AccountTable} from "@/data/account";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
     if (req.method === 'GET') {
@@ -134,7 +135,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                         // 截断邮箱 @ 前面的部分作为昵称
                         email.toString().split('@')[0],
                         "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
-                        password,
+                        AccountTable.getPassword(password as string),
                         email,
                         AccountType.EMAIL,
                         new Date().getTime()
@@ -171,14 +172,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                     return;
                 }
 
-                // 检查密码是否正确
-                if (account[0].email !== email) {
-                    res.status(400).json(new Message(400, 'email is incorrect.', null));
-                    return;
-                }
-
                 // 修改密码
-                account[0].password = password;
+                account[0].password = AccountTable.getPassword(password as string);
 
                 await accounts.updateAccount(account[0].id, account[0]);
                 res.status(200).json(new Message(200, 'success', null));
@@ -196,7 +191,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             }
 
             // 检查密码是否正确
-            if (account[0].password !== password) {
+            if (!AccountTable.checkPassword(account[0].password as string, password as string)) {
                 res.status(400).json(new Message(400, 'password is incorrect.', null));
                 return;
             }
