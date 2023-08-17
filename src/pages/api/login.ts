@@ -64,9 +64,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             id,
             name,
             avatar_url,
+            null,
+            null,
             AccountType.GITHUB,
             new Date().getTime()
         );
+
+        if (!account.openid) {
+            res.status(400).json(new Message(400, 'invalid response.', null));
+            return;
+        }
 
         // 检查用户是否已经记录过
         const accountInDB = await accounts.readAccount(account.openid, AccountType.GITHUB);
@@ -90,6 +97,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         await tokens.set(token.token, token);
 
         res.status(200).json(new Message(200, 'success', {account: account, token: token, origin: userResJson}));
+    } else if (req.method === 'POST') {
+        const header = req.headers['authorization'];
+        const {email, password, code} = req.body;
+
+        const tokens = new CacheService<Token>();
+        const token = await tokens.get(header as string) as Token;
+
+        // 使用不同参数进行不同的操作
+        // email password 为登录
+        // email code password 为注册后登录
+        // token email 和 password 为修改密码
+
+        // FIXME: 什么三层嵌套 一定记得回头改 uwu
+        if (email && password) {
+            if (code && !token) {
+                // 获取验证码
+                const verify = await tokens.get(code as string) as Token;
+
+                if (verify) {
+
+                }
+            }
+
+            if (token && !code) {
+
+            }
+        }
     } else {
         res.status(400).json(new Message(400, 'request method not match.', null));
     }
