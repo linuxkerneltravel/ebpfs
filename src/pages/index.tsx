@@ -5,8 +5,16 @@ import {State} from "@/pages/_app";
 import Input from "@/pages/components/Input";
 import {useState} from "react";
 import {useRouter} from "next/router";
+import Message from "@/common/message";
+import {Account} from "@/common/account";
+import {Token} from "@/common/token";
 
 const inter = Inter({subsets: ['latin']})
+
+interface LoginResponse {
+    account: Account;
+    token: Token;
+}
 
 export default function Home() {
     const router = useRouter();
@@ -26,9 +34,26 @@ export default function Home() {
                     password: password,
                 })
             })
-            .then(result => result.json())
-            .then(() => router.push("/account")
-                .then(ignore => 0));
+            .then(res => res.json())
+            .then(res => {
+                let data = res as Message<LoginResponse | string>;
+
+                console.log(data);
+
+                if (data.status === 200) {
+                    let re = res as Message<LoginResponse>;
+                    State.token = re.data.token;
+                    State.account = re.data.account;
+
+                    return router.push('/account').then(() => {});
+                }
+
+                if (data.status === 302) {
+                    let re = res as Message<string>;
+
+                    return router.push(re.data).then(() => {});
+                }
+            });
     }
 
     return (

@@ -4,8 +4,16 @@ import Button from "@/pages/components/Button";
 import {Inter} from "next/font/google";
 import Input from "@/pages/components/Input";
 import {useRouter} from "next/router";
+import {Account} from "@/common/account";
+import {Token} from "@/common/token";
+import Message from "@/common/message";
 
 const inter = Inter({subsets: ['latin']})
+
+interface LoginResponse {
+    account: Account;
+    token: Token;
+}
 
 export default function VerifyPage() {
     (function () {
@@ -19,20 +27,18 @@ export default function VerifyPage() {
     const [code, setCode] = useState<string>('');
 
     const submit = () => {
-        fetch('/api/login',
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    email: email,
-                    password: password,
-                    code: code
-                })
-            })
+        fetch(`/api/verify?email=${email}&password=${password}&code=${code}`)
             .then(result => result.json())
-            .then(() => router.push("/account").then(ignore => 0));
+            .then(res => {
+                let data = res as Message<LoginResponse>;
+
+                if (data.status === 200) {
+                    State.token = data.data.token;
+                    State.account = data.data.account;
+
+                    return router.push('/account');
+                }
+            });
     };
 
     return (
@@ -44,6 +50,7 @@ export default function VerifyPage() {
                         <div className="bg-white flex flex-col flex-wrap gap-4 p-16 rounded-2xl"
                              style={{width: '480px'}}>
                             <p className="font-bold text-xl">验证你的邮件地址</p>
+                            <p className="font-bold text-sm">注册邮件已经发送至 {email}</p>
                             <Input placeholder="验证码" height="48px" width="350px" onChange={setCode}
                                    onEnterPress={() => {
                                    }}/>

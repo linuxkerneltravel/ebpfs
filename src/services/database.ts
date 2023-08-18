@@ -36,7 +36,8 @@ export default class DatabaseService<T> {
                 .execute();
 
 
-        } catch (ignore) { }
+        } catch (ignore) {
+        }
 
         try {
             await this.db.schema.createTable('account')
@@ -49,7 +50,8 @@ export default class DatabaseService<T> {
                 .addColumn('type', 'text')
                 .addColumn('created', 'bigint')
                 .execute();
-        } catch (ignore) { }
+        } catch (ignore) {
+        }
     }
 
     public async createAccount({id, openid, nickname, avatar, email, password, type, created}: Account) {

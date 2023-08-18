@@ -5,6 +5,7 @@ import CacheService from "@/services/cache";
 import {Token, TokenType} from "@/common/token";
 import {Account, AccountType} from "@/common/account";
 import {AccountTable} from "@/data/account";
+import EmailService from "@/services/mail";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
     if (req.method === 'GET') {
@@ -107,64 +108,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
         // 使用不同参数进行不同的操作
         // email password 为登录
-        // email code password 为注册后登录
         // token email 和 password 为修改密码
 
         // FIXME: 什么三层嵌套 一定记得回头改 uwu
         if (email && password) {
-            if (code && !token) {
-                // 获取验证码
-                const verify = await tokens.get(code as string) as Token;
-
-                if (verify) {
-                    if (verify.expire < new Date().getTime()) {
-                        res.status(400).json(new Message(400, 'code is expired.', null));
-                        return;
-                    }
-                }
-
-                // 检查用户是否存在
-                const accounts = new DatabaseService<Account>();
-                // 检查表
-                await accounts.autoMigrate();
-                const account = await accounts.readAccount(email as string, AccountType.EMAIL);
-
-                if (account.length === 0) {
-                    // 创建用户
-                    const acc = new Account(
-                        crypto.randomUUID(),
-                        null,
-                        // 截断邮箱 @ 前面的部分作为昵称
-                        email.toString().split('@')[0],
-                        "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
-                        AccountTable.getPassword(password as string),
-                        email,
-                        AccountType.EMAIL,
-                        new Date().getTime()
-                    );
-
-                    await accounts.createAccount(acc);
-                    account[0] = acc;
-                }
-
-                // 创建 Token
-                const time = new Date().getTime();
-                const expire = new Date(time + 60 * 60 * 1000).getTime();
-
-                const t = new Token(
-                    crypto.randomUUID(),
-                    account[0].id,
-                    TokenType.ACCOUNT_API_KEY,
-                    time,
-                    expire
-                );
-
-                await tokens.set(t.token, t);
-                res.status(200).json(new Message(200, 'success', {account: account[0], token: t}));
-                return;
-            }
-
-            if (token && !code) {
+            if (token) {
                 // 修改密码
                 const accounts = new DatabaseService<Account>();
                 // 检查表
@@ -191,10 +139,65 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             await accounts.autoMigrate();
             const account = await accounts.readAccount(email as string, AccountType.EMAIL);
 
+            // 账号不存在
             if (account.length === 0) {
-                // 账号不存在 携带 email 和 password 注册账号
+                // 发送注册邮件
+                const emailSender = process.env.EMAIL_SENDER;
+                const emailSenderPassword = process.env.EMAIL_SENDER_PASSWORD;
+                const emailSmtpHost = process.env.EMAIL_SMTP_HOST;
+                const emailSmtpPort = process.env.EMAIL_SMTP_PORT;
+                const emailSmtpSecure = process.env.EMAIL_SMTP_SECURE;
 
-                res.redirect(`/api/verify?email=${email}&password=${password}`);
+                if (emailSender === null || !emailSender) {
+                    res.status(400).json(new Message(400, 'emailSender is invalid.', null));
+                    return;
+                }
+
+                if (emailSenderPassword === null || !emailSenderPassword) {
+                    res.status(400).json(new Message(400, 'emailSenderPassword is invalid.', null));
+                    return;
+                }
+
+                if (emailSmtpHost === null || !emailSmtpHost) {
+                    res.status(400).json(new Message(400, 'emailSmtpHost is invalid.', null));
+                    return;
+                }
+
+                if (emailSmtpPort === null || !emailSmtpPort) {
+                    res.status(400).json(new Message(400, 'emailSmtpPort is invalid.', null));
+                    return;
+                }
+
+                if (emailSmtpSecure === null || !emailSmtpSecure) {
+                    res.status(400).json(new Message(400, 'emailSmtpSecure is invalid.', null));
+                    return;
+                }
+
+                const sender = new EmailService(
+                    emailSender,
+                    emailSenderPassword,
+                    emailSmtpHost,
+                    emailSmtpPort,
+                    Boolean(emailSmtpSecure),
+                );
+
+                const verifyCode = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+
+                // 发送邮件
+                await sender.send(email, 'Verify your email address', `Your verification code is ${verifyCode}.`);
+
+                // 存入 Token
+                const tokens = new CacheService<Token>();
+                await tokens.set(verifyCode, new Token(
+                    verifyCode,
+                    email,
+                    TokenType.EMAIL_VERIFY_CODE,
+                    Date.now(),
+                    Date.now() + 1000 * 60 * 10)
+                );
+
+                // 跳转到验证页面
+                res.status(200).json(new Message(302, 'redirect to verify page.', `/verify?email=${email}&password=${password}`));
                 return;
             }
 
