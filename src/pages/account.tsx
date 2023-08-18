@@ -93,7 +93,7 @@ export default function AccountPage() {
                         : <div className="mt-2">
                             <div className="bg-white flex flex-col flex-wrap gap-4 p-16 rounded-2xl"
                                  style={{width: '480px'}}>
-                                <p className="font-bold text-xl"></p>
+                                <p className="font-bold text-2xl mb-6">登录账号</p>
                                 <Input placeholder="邮箱（未注册将自动注册）" height="48px" width="350px" onChange={setEmail}
                                        onEnterPress={() => {
                                        }}/>

@@ -10,7 +10,7 @@
 
 1. 注册 [Vercel](https://vercel.com) 账户并 Connect 仓库或点击上方按钮一键部署
 
-2. 为 Vercel Project 添加环境变量
+2. 为 Vercel Project 添加**必要的**环境变量
 
    | 变量名                     | 描述                            | 示例                             |
    | -------------------------- | ------------------------------- | -------------------------------- |
@@ -19,6 +19,16 @@
    | GITHUB_OAUTH_CLIENT_SECRET | 用户 OAuth 登录的 Client Secret | 9f7c87a1a5a2351687231f683445224e |
    | ALGOLIA_APPLICATION_ID     | Algolia 搜索服务应用 ID         | KFCVME50                         |
    | ALGOLIA_API_KEY            | Algolia 搜索服务 API Key        | 9f7c87a1a5a2351687231f683445224e |
+
+3. **可选性**功能的环境变量
+
+   | 变量名                | 描述                        | 示例                             |
+   | --------------------- | --------------------------- | -------------------------------- |
+   | EMAIL_SENDER          | 邮箱地址                    | ebpfs@ebpfs.vercel.app           |
+   | EMAIL_SENDER_PASSWORD | 邮箱密码                    | 9f7c87a1a5a2351687231f683445224e |
+   | EMAIL_SMTP_HOST       | SMTP 服务主机               | mail.qq.com                      |
+   | EMAIL_SMTP_PORT       | SMTP 服务端口               | 445                              |
+   | EMAIL_SMTP_SECURE     | 是否使用 SSL / TLS 加密会话 | true / false                     |
 
 ## 🤖 API 接口
 
