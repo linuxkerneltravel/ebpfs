@@ -1,83 +1,64 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import Message from "@/common/message";
-import EmailService from "@/services/mail";
-import {Token, TokenType} from "@/common/token";
 import CacheService from "@/services/cache";
+import {Token, TokenType} from "@/common/token";
+import {Account, AccountType} from "@/common/account";
+import DatabaseService from "@/services/database";
+import {AccountTable} from "@/data/account";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
     if (req.method === 'GET') {
-        const emailSender = process.env.EMAIL_SENDER;
-        const emailSenderPassword = process.env.EMAIL_SENDER_PASSWORD;
-        const emailSmtpHost = process.env.EMAIL_SMTP_HOST;
-        const emailSmtpPort = process.env.EMAIL_SMTP_PORT;
-        const emailSmtpSecure = process.env.EMAIL_SMTP_SECURE;
+        const {email, password, code} = req.query;
 
-        const {username, password} = req.query;
-
-        if (username === null || !username) {
-            res.status(400).json(new Message(400, 'username is invalid.', null));
-            return;
-        }
-
-        if (password === null || !password) {
-            res.status(400).json(new Message(400, 'password is invalid.', null));
-            return;
-        }
-
-        if (emailSender === null || !emailSender) {
-            res.status(400).json(new Message(400, 'emailSender is invalid.', null));
-            return;
-        }
-
-        if (emailSenderPassword === null || !emailSenderPassword) {
-            res.status(400).json(new Message(400, 'emailSenderPassword is invalid.', null));
-            return;
-        }
-
-        if (emailSmtpHost === null || !emailSmtpHost) {
-            res.status(400).json(new Message(400, 'emailSmtpHost is invalid.', null));
-            return;
-        }
-
-        if (emailSmtpPort === null || !emailSmtpPort) {
-            res.status(400).json(new Message(400, 'emailSmtpPort is invalid.', null));
-            return;
-        }
-
-        if (emailSmtpSecure === null || !emailSmtpSecure) {
-            res.status(400).json(new Message(400, 'emailSmtpSecure is invalid.', null));
-            return;
-        }
-
-        const sender = new EmailService(
-            emailSender,
-            emailSenderPassword,
-            emailSmtpHost,
-            emailSmtpPort,
-            Boolean(emailSmtpSecure),
-        );
-
-        const code = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
-        const email = req.query.email;
-
-        if (email === null || !email || typeof email !== 'string') {
-            res.status(400).json(new Message(400, 'email is invalid.', null));
-            return;
-        }
-
-        // 发送邮件
-        await sender.send(email, 'Verify your email address', `Your verification code is ${code}.`);
-
-        // 存入 Token
         const tokens = new CacheService<Token>();
-        await tokens.set(code, new Token(
-            code,
+        const token = await tokens.get(code as string);
+
+        if (!token) {
+            res.status(400).json(new Message(400, 'token expired.', null));
+            return;
+        }
+
+        if (token.belong !== email) {
+            res.status(400).json(new Message(400, 'invalid token.', null));
+            return;
+        }
+
+        if (token.token !== code) {
+            res.status(400).json(new Message(400, 'invalid code.', null));
+            return;
+        }
+
+        // 修改密码
+        const accounts = new DatabaseService<Account>();
+        // 检查表
+        await accounts.autoMigrate();
+        // 创建用户
+        const account = new Account(
+            crypto.randomUUID(),
+            null,
+            // 截断邮箱 @ 前面的部分作为昵称
+            email.toString().split('@')[0],
+            "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
+            AccountTable.getPassword(password as string),
             email,
-            TokenType.EMAIL_VERIFY_CODE,
-            Date.now(),
-            Date.now() + 1000 * 60 * 10)
+            AccountType.EMAIL,
+            new Date().getTime()
         );
 
-        res.redirect(`/verify?email=${email}&password=${password}`);
+        await accounts.createAccount(account);
+
+        const time = new Date().getTime();
+        const expire = new Date(time + 60 * 60 * 1000).getTime();
+        const t = new Token(
+            crypto.randomUUID(),
+            account.id,
+            TokenType.ACCOUNT_API_KEY,
+            time,
+            expire
+        );
+
+        await tokens.set(t.token, t);
+
+        res.status(200).json(new Message(200, 'success', {account: account, token: t}));
     } else res.status(400).json(new Message(400, 'request method not match.', null));
 }
