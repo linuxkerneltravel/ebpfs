@@ -75,7 +75,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             email,
             TokenType.EMAIL_VERIFY_CODE,
             Date.now(),
-            Date.now() + 1000 * 60 * 10));
+            Date.now() + 1000 * 60 * 10)
+        );
 
         res.redirect(`/verify?email=${email}&password=${password}`);
     } else res.status(400).json(new Message(400, 'request method not match.', null));
