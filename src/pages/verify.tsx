@@ -19,7 +19,7 @@ export default function VerifyPage() {
     const [code, setCode] = useState<string>('');
 
     const submit = () => {
-        fetch('/login',
+        fetch('/api/login',
             {
                 method: 'POST',
                 headers: {
