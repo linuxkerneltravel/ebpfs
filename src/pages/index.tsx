@@ -15,7 +15,7 @@ export default function Home() {
     const [password, setPassword] = useState<string>('');
 
     const login = () => {
-        fetch('/login',
+        fetch('/api/login',
             {
                 method: 'POST',
                 headers: {

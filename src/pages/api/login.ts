@@ -103,7 +103,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         const {email, password, code} = req.body;
 
         const tokens = new CacheService<Token>();
-        const token = await tokens.get(header as string) as Token;
+        const token = header ? await tokens.get(header as string) as Token : null;
 
         // 使用不同参数进行不同的操作
         // email password 为登录
@@ -125,6 +125,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
                 // 检查用户是否存在
                 const accounts = new DatabaseService<Account>();
+                // 检查表
+                await accounts.autoMigrate();
                 const account = await accounts.readAccount(email as string, AccountType.EMAIL);
 
                 if (account.length === 0) {
@@ -165,6 +167,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             if (token && !code) {
                 // 修改密码
                 const accounts = new DatabaseService<Account>();
+                // 检查表
+                await accounts.autoMigrate();
                 const account = await accounts.readAccount(token.belong, AccountType.EMAIL);
 
                 if (account.length === 0) {
@@ -183,6 +187,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             // 普通登录
             // 检查用户是否存在
             const accounts = new DatabaseService<Account>();
+            // 检查表
+            await accounts.autoMigrate();
             const account = await accounts.readAccount(email as string, AccountType.EMAIL);
 
             if (account.length === 0) {
