@@ -4,6 +4,8 @@ import CacheService from "@/services/cache";
 import {Token} from "@/common/token";
 import DatabaseService from "@/services/database";
 import {AccountType} from "@/data/account";
+import {Repository} from "@/common/repository";
+import {Account} from "@/common/account";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
     if (req.method === 'GET') {
@@ -19,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         const token = await tokens.get(header as string) as Token;
 
         // 查询账号信息
-        const accounts = new DatabaseService();
+        const accounts = new DatabaseService<Account>();
         const id = token.belong;
         const account = accounts.readAccount(id, AccountType.GITHUB);
 
@@ -28,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         delete account.password;
 
         // 查询仓库列表
-        const repositories = new DatabaseService();
+        const repositories = new DatabaseService<Repository>();
         const repos = repositories.readRepositoryByAccount(id);
 
         res.status(200).json(new Message(200, 'success.',

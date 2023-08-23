@@ -60,6 +60,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         // 检查表
         await accounts.autoMigrate();
 
+        // 检查用户是否已经记录过
+        const accountInDB = await accounts.readAccount(id, AccountType.GITHUB);
+
         // 如果数据库中没有则创建
         const account = new Account(
             crypto.randomUUID(),
@@ -77,12 +80,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             return;
         }
 
-        // 检查用户是否已经记录过
-        const accountInDB = await accounts.readAccount(account.openid, AccountType.GITHUB);
-
+        // FIXME: 这里逻辑有点奇怪 为什么要提前创建 Account 呢？ 目前还需亚多判断一个 openid 是否存在
         accountInDB.length === 0
             ? await accounts.createAccount(account)
             : await accounts.updateAccount(account.openid, account);
+
 
         // 无论如何都返回用户信息和有效 Token
         const time = new Date().getTime();
@@ -98,7 +100,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
         await tokens.set(token.token, token);
 
-        res.status(200).json(new Message(200, 'success', {account: account, token: token, origin: userResJson}));
+        // FIXME: 特别是这个 account 账号字段 三元太别扭了
+        res.status(200).json(new Message(200, 'success', {
+            account: accountInDB.length === 0 ? account : accountInDB[0],
+            token: token,
+            origin: userResJson
+        }));
     } else if (req.method === 'POST') {
         const header = req.headers['authorization'];
         const {email, password, code} = req.body;
