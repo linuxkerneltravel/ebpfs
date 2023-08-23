@@ -45,13 +45,15 @@ export default function Home() {
                     State.token = re.data.token;
                     State.account = re.data.account;
 
-                    return router.push('/account').then(() => {});
+                    return router.push('/account').then(() => {
+                    });
                 }
 
                 if (data.status === 302) {
                     let re = res as Message<string>;
 
-                    return router.push(re.data).then(() => {});
+                    return router.push(re.data).then(() => {
+                    });
                 }
             });
     }
@@ -90,30 +92,31 @@ export default function Home() {
                 </div>
             </div>
             <div className="min-h-screen w-full bg-white flex items-center justify-center">
-                <div className="flex flex-col shadow-xl p-16 gap-8 rounded-xl" style={{ width: '90%', minHeight: '500px' }}>
+                <div className="flex flex-col shadow-xl p-16 gap-8 rounded-xl"
+                     style={{width: '90%', minHeight: '500px'}}>
                     <p className="text-3xl">eBPF 搜索统计 / 趋势</p>
                     <div className="flex flex-row items-center justify-center gap-16">
-                        <div className="shadow-xl rounded-xl" style={{ width: '48%', height: '320px' }}>
+                        <div className="shadow-xl rounded-xl" style={{width: '48%', height: '320px'}}>
 
                         </div>
-                        <div className="shadow-xl rounded-xl" style={{ width: '48%', height: '320px' }}>
+                        <div className="shadow-xl rounded-xl" style={{width: '48%', height: '320px'}}>
 
                         </div>
                     </div>
                     <div className="flex flex-row items-center justify-center gap-16 mt-8">
-                        <div className="shadow-xl rounded-xl" style={{ width: '380px', height: '320px' }}>
+                        <div className="shadow-xl rounded-xl" style={{width: '380px', height: '320px'}}>
 
                         </div>
-                        <div className="shadow-xl rounded-xl" style={{ width: '380px', height: '320px' }}>
+                        <div className="shadow-xl rounded-xl" style={{width: '380px', height: '320px'}}>
 
                         </div>
-                        <div className="shadow-xl rounded-xl" style={{ width: '380px', height: '320px' }}>
+                        <div className="shadow-xl rounded-xl" style={{width: '380px', height: '320px'}}>
 
                         </div>
-                        <div className="shadow-xl rounded-xl" style={{ width: '380px', height: '320px' }}>
+                        <div className="shadow-xl rounded-xl" style={{width: '380px', height: '320px'}}>
 
                         </div>
-                        <div className="shadow-xl rounded-xl" style={{ width: '380px', height: '320px' }}>
+                        <div className="shadow-xl rounded-xl" style={{width: '380px', height: '320px'}}>
 
                         </div>
                     </div>
