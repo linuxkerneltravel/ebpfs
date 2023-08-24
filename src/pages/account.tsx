@@ -37,8 +37,7 @@ export default function AccountPage() {
                 .then(result => result.json() as Promise<Message<Response>>)
                 .then(data => setResult(data.data));
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [token]);
 
     const copy = () => {
         const input = document.createElement('input');
@@ -132,7 +131,8 @@ export default function AccountPage() {
             <Navbar src={result?.account.avatar}/>
             <div className="min-h-screen w-full backdrop-blur-2xl flex flex-col gap-2 items-center justify-center">
                 {
-                    result
+                    // 获取账号有结果或者本地 localStorage 有 Token
+                    result || token
                         ? renderAccount()
                         : renderLogin()
                 }

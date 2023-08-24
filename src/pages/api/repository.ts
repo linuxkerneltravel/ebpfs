@@ -10,17 +10,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     if (req.method === 'GET') {
         const {id} = req.query;
 
+        const repositories = new DatabaseService();
+
+        // 如果没有携带参数则按获取创建时间最新的 10 个仓库
         if (id === null || id === '') {
-            res.status(400).json(new Message(400, 'repository is invalid.', null));
+            res.status(200).json(
+                new Message(
+                    200,
+                    'OK',
+                    {repository: await repositories.readRepositoryByLimit(10) as Repository[]}
+                )
+            );
+
             return;
         }
 
-        const repositories = new DatabaseService();
         const repo = await repositories.readRepository(id as string) as Repository[];
-
-        res.status(200).json(new Message(200, 'OK', {
-            repository: repo
-        }));
+        res.status(200).json(new Message(200, 'OK', {repository: repo}));
     } else if (req.method === 'POST') {
         // 根据 Token 获取账号 ID
         const header = req.headers['authorization'];
@@ -47,24 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             entry, author, tags
         }: Repository = req.body;
 
-        const repo = new Repository(
-            crypto.randomUUID(),
-            token.belong,
-            new Date().getTime().toString(),
-            update,
-            organization,
-            project,
-            version,
-            readme,
-            type,
-            repository,
-            entry,
-            author,
-            tags
-        )
-
-        await repositories.createRepository(repo);
-
+        // 初始化搜索服务
         const algoliaApplicationID = process.env.ALGOLIA_APPLICATION_ID;
         const algoliaAPIKey = process.env.ALGOLIA_API_KEY;
 
@@ -79,22 +68,89 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         }
 
         const search = new SearchService(algoliaApplicationID, algoliaAPIKey);
-        const content = await fetch(repo.readme).then(async (response) => response.text());
+        // 获取 readme
+        const content = await fetch(readme).then(async (response) => response.text());
 
-        await search.upload({
-            id: repo.id,
-            url: repo.repository,
-            organization: repo.organization,
-            project: repo.project,
-            readme: repo.readme,
-            // 字符数量限制为 5000 避免触发 algolia 的限制阈值
-            content: content.length > 5000
-                ? content.substring(0, 5000).replace(/\n/g, "")
-                : content.replace(/\n/g, ""),
-            author: repo.author,
-            tags: repo.tags
-        });
+        // 检查是否已经存在
+        const repos = await repositories.readRepositoryByOrganizationAndProject(organization, project) as Repository[];
 
-        res.status(200).json(new Message(200, 'OK', repo));
+        if (repos && repos.length !== 0) {
+            let match = repos.filter((item) => item.account === token.belong);
+
+            // 意味着仓库重名
+            if (match && match.length !== 0) {
+                res.status(400).json(new Message(400, 'repository is already exists.', null));
+                return;
+            }
+
+            // 不重名则更新
+            const repo = repos[0];
+
+            await repositories.updateRepository(repo.id, {
+                id: repo.id,
+                account: repo.account,
+                created: repo.created,
+                update: new Date().getTime().toString(),
+                organization: organization,
+                project: project,
+                version: version,
+                readme: readme,
+                type: type,
+                repository: repository,
+                entry: entry,
+                author: author,
+                tags: tags
+            });
+
+            await search.update({
+                id: repo.id,
+                url: repo.repository,
+                organization: repo.organization,
+                project: repo.project,
+                readme: repo.readme,
+                // 字符数量限制为 5000 避免触发 algolia 的限制阈值
+                content: content.length > 5000
+                    ? content.substring(0, 5000).replace(/\n/g, "")
+                    : content.replace(/\n/g, ""),
+                author: repo.author,
+                tags: repo.tags
+            });
+
+            res.status(200).json(new Message(200, 'OK', repo));
+            return;
+        } else {
+            const repo = new Repository(
+                crypto.randomUUID(),
+                token.belong,
+                new Date().getTime().toString(),
+                update,
+                organization,
+                project,
+                version,
+                readme,
+                type,
+                repository,
+                entry,
+                author,
+                tags
+            )
+
+            await repositories.createRepository(repo);
+            await search.upload({
+                id: repo.id,
+                url: repo.repository,
+                organization: repo.organization,
+                project: repo.project,
+                readme: repo.readme,
+                // 字符数量限制为 5000 避免触发 algolia 的限制阈值
+                content: content.length > 5000
+                    ? content.substring(0, 5000).replace(/\n/g, "")
+                    : content.replace(/\n/g, ""),
+                author: repo.author,
+                tags: repo.tags
+            });
+
+            res.status(200).json(new Message(200, 'OK', repo));
+        }
     } else res.status(400).json(new Message(400, 'request method not match.', null));
 }
