@@ -32,4 +32,28 @@ export default class SearchService {
 
         return index.saveObject(save).wait();
     }
+
+    async update({id, url, organization, project, readme, content, author, tags}: Index) {
+        const client = algoliasearch(this.applicationId, this.apiKey);
+        const index = client.initIndex('docs');
+
+        index.partialUpdateObject({
+            objectID: id,
+            id: id,
+            url: url,
+            organization: organization,
+            project: project,
+            readme: readme,
+            content: content,
+            author: author,
+            tags: tags
+        })
+    }
+
+    async delete(id: string) {
+        const client = algoliasearch(this.applicationId, this.apiKey);
+        const index = client.initIndex('docs');
+
+        return index.deleteObject(id).wait();
+    }
 }

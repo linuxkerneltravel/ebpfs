@@ -109,10 +109,28 @@ export default class DatabaseService<T> {
             .execute();
     }
 
+    public async readRepositoryByOrganizationAndProject(organization: string, project: string) {
+        return await this.db
+            .selectFrom('repository')
+            .where('organization', '=', organization)
+            .where('project', '=', project)
+            .selectAll()
+            .execute();
+    }
+
     public async readRepositoryByAccount(account: string) {
         return await this.db
             .selectFrom('repository')
             .where('account', '=', account)
+            .selectAll()
+            .execute();
+    }
+
+    public async readRepositoryByLimit(limit: number) {
+        return await this.db
+            .selectFrom('repository')
+            .orderBy('created', 'desc')
+            .limit(limit)
             .selectAll()
             .execute();
     }
