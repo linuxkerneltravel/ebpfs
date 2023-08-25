@@ -121,8 +121,8 @@ export default class DatabaseService<T> {
     public async readRepositoryByAccount(account: string) {
         return await this.db
             .selectFrom('repository')
-            .where('account', '=', account)
             .selectAll()
+            .where('account', '=', account)
             .execute();
     }
 

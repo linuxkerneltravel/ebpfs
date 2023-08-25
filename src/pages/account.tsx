@@ -32,12 +32,12 @@ export default function AccountPage() {
     useEffect(() => {
         // 获取账号信息的逻辑
         // 这里的 Token 在 isLogin 校验中判定为非空 那么这里一定不为空
-        if (token && token.token) {
-            fetch('/api/account', {headers: {'Authorization': token.token}})
-                .then(result => result.json() as Promise<Message<Response>>)
-                .then(data => setResult(data.data));
-        }
-    }, [token]);
+        fetch('/api/account', {headers: {'Authorization': token.token}})
+            .then(result => result.json() as Promise<Message<Response>>)
+            .then(data => setResult(data.data));
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const copy = () => {
         const input = document.createElement('input');

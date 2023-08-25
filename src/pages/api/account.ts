@@ -23,20 +23,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         // 查询账号信息
         const accounts = new DatabaseService<Account>();
         const id = token.belong;
-        const account = accounts.readAccount(id, AccountType.GITHUB);
+        const account = await accounts.readAccount(id, AccountType.GITHUB);
 
         // 过滤 password 字段
-        // @ts-ignore
-        delete account.password;
+        account[0].password = '';
 
         // 查询仓库列表
         const repositories = new DatabaseService<Repository>();
         const repos = repositories.readRepositoryByAccount(id);
 
+        console.log(repos)
+
         res.status(200).json(new Message(200, 'success.',
             {
                 id: id,
-                account: account,
+                account: account[0],
                 repositories: repos
             }));
     } else res.status(400).json(new Message(400, 'request method not match.', null));

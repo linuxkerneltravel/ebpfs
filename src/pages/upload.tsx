@@ -14,6 +14,9 @@ export default function UploadPage() {
     }());
 
     const router = useRouter();
+    // 从上一个页面传递的参数
+    // 如果不为 undefined 则为更新仓库
+    const {update_organization, update_project} = router.query;
 
     //
     // 提交仓库表单
@@ -34,6 +37,10 @@ export default function UploadPage() {
     const [author, setAuthor] = useState<string[]>([]);
     // 标签
     const [tags, setTags] = useState<string[]>([]);
+
+    // 预先填入
+    if (update_organization) setOrganization(update_organization as string);
+    if (update_project) setProject(update_project as string);
 
     const token = State.token as Token;
 
