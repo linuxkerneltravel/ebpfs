@@ -121,6 +121,7 @@ export default function Home() {
                                     <Row key={index}
                                          title={`${value.organization}  / ${value.project}`}
                                          text={value.readme}
+                                         tags={value.tags}
                                          url={`/repository?id=${value.id}`}
                                     />
                                 )
