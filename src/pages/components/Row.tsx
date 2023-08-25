@@ -10,7 +10,13 @@ interface RowProps extends WithRouterProps {
 }
 
 class Row extends Component<RowProps> {
+    constructor(props: RowProps) {
+        super(props);
+    }
+
     render() {
+        const tag = new Array(...this.props.tags);
+
         return (
             <div className="shadow-xl flex justify-center flex-col gap-4 p-6"
                  style={{
@@ -26,7 +32,7 @@ class Row extends Component<RowProps> {
                 <p className="text-gray-600 text-sm">{this.props.text}</p>
                 <div className="flex flex-row flex-wrap gap-2">
                     {
-                        this.props.tags.map((value, index) => {
+                        tag.map((value, index) => {
                             return (
                                 <div key={index} className="bg-gray-200 rounded-full px-2 py-1 text-gray-600 text-sm">
                                     {value}
