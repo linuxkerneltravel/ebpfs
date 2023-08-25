@@ -117,6 +117,8 @@ export default function Home() {
                     {
                         repository.length !== 0
                             ? repository.map((value, index) => {
+                                console.log(value);
+
                                 return (
                                     <Row key={index}
                                          title={`${value.organization}  / ${value.project}`}
