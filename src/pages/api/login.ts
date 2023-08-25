@@ -92,7 +92,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
         const token = new Token(
             crypto.randomUUID(),
-            account.id,
+            accountInDB.length === 0 ? account.id : accountInDB[0].id,
             TokenType.OAUTH_TOKEN,
             time,
             expire
