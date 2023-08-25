@@ -68,6 +68,10 @@ export default function AccountPage() {
                 .then(ignore => 0));
     }
 
+    const update = (org: string, project: string) => {
+        router.push(`/upload?update_organization=${org}&update_project=${project}`).then(ignore => 0);
+    }
+
     function renderLogin() {
         return (
             <div className="mt-2">
@@ -119,7 +123,7 @@ export default function AccountPage() {
                                             <div className=""
                                                  style={{height: '32px'}}
                                                  key={index}
-                                                 onClick={() => router.push(`/upload?update_organization=${repository.organization}&update_project=${repository.project}`)}>
+                                                 onClick={() => update(repository.organization, repository.project)}>
                                                 <div className="font-bold">
                                                     {
                                                         `${repository.organization} / ${repository.project}`
