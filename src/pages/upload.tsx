@@ -18,13 +18,16 @@ export default function UploadPage() {
     // 如果不为 undefined 则为更新仓库
     const {update_organization, update_project} = router.query;
 
+    console.log(update_organization)
+    console.log(update_project)
+
     //
     // 提交仓库表单
     //
     // 组织
-    const [organization, setOrganization] = useState<string>('');
+    const [organization, setOrganization] = useState<string>(update_organization ? update_organization as string : '');
     // 项目
-    const [project, setProject] = useState<string>('');
+    const [project, setProject] = useState<string>(update_project ? update_project as string : '');
     // 版本
     const [version, setVersion] = useState<string>('');
     // 仓库
@@ -37,10 +40,6 @@ export default function UploadPage() {
     const [author, setAuthor] = useState<string[]>([]);
     // 标签
     const [tags, setTags] = useState<string[]>([]);
-
-    // 预先填入
-    if (update_organization) setOrganization(update_organization as string);
-    if (update_project) setProject(update_project as string);
 
     const token = State.token as Token;
 
@@ -78,10 +77,10 @@ export default function UploadPage() {
                         <div className="bg-white flex flex-col flex-wrap gap-4 p-16 rounded-2xl"
                              style={{width: '480px'}}>
                             <p className="font-bold text-xl">提交一个仓库 / 更新仓库</p>
-                            <Input placeholder="组织" height="48px" width="350px" onChange={setOrganization}
+                            <Input placeholder={ update_organization ? update_organization as string : '组织'} height="48px" width="350px" onChange={setOrganization}
                                    onEnterPress={() => {
                                    }}/>
-                            <Input placeholder="项目" height="48px" width="350px" onChange={setProject}
+                            <Input placeholder={ update_project ? update_project as string : '项目'} height="48px" width="350px" onChange={setProject}
                                    onEnterPress={() => {
                                    }}/>
                             <Input placeholder="版本" height="48px" width="350px" onChange={setVersion}
