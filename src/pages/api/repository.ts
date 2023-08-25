@@ -23,8 +23,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                     : content.replace(/\n/g, "")
 
                 item.readme = content;
-                // @ts-ignore
-                item.tags = item.tags.join(',');
             }
 
             res.status(200).json(
