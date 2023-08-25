@@ -112,7 +112,7 @@ export default function Home() {
                 </div>
             </div>
             <div className="min-h-screen w-full bg-white flex items-center justify-center">
-                <div className="flex flex-col shadow-xl p-16 gap-8 rounded-xl"
+                <div className="flex flex-col shadow-xl p-16 gap-8 rounded-xl m-8"
                      style={{minWidth: '680px', minHeight: '480px'}}>
                     {
                         repository.length !== 0
@@ -134,7 +134,7 @@ export default function Home() {
             </div>
             {
                 <div className="min-h-screen w-full bg-white flex items-center justify-center">
-                    <div className="flex flex-col shadow-xl p-16 gap-8 rounded-xl"
+                    <div className="flex flex-col shadow-xl p-16 gap-8 rounded-xl m-8"
                          style={{minWidth: '680px', minHeight: '480px'}}>
                         <p className="text-xl">eBPF 搜索统计 / 趋势</p>
                     </div>
