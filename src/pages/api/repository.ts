@@ -23,6 +23,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                     : content.replace(/\n/g, "")
 
                 item.readme = content;
+                // 将 tags 从字符串转换为数组
+                // @ts-ignore
+                item.tags = item.tags.split(',');
             }
 
             res.status(200).json(
