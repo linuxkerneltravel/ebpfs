@@ -121,7 +121,10 @@ export default function Home() {
                                     <Row key={index}
                                          title={`${value.organization}  / ${value.project}`}
                                          text={value.readme}
-                                         tags={value.tags}
+                                         tags={
+                                             // @ts-ignore
+                                             (value.tags as string).split(',')
+                                         }
                                          url={`/repository?id=${value.id}`}
                                     />
                                 )
