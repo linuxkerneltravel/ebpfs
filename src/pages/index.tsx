@@ -3,11 +3,13 @@ import Navbar from "@/pages/components/Navbar";
 import Button from "@/pages/components/Button";
 import {State} from "@/pages/_app";
 import Input from "@/pages/components/Input";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import Message from "@/common/message";
 import {Account} from "@/common/account";
 import {Token} from "@/common/token";
+import {Repository} from "@/common/repository";
+import Row from "@/pages/components/Row";
 
 const inter = Inter({subsets: ['latin']})
 
@@ -16,11 +18,16 @@ interface LoginResponse {
     token: Token;
 }
 
+interface RepositoryResponse {
+    repository: Repository[];
+}
+
 export default function Home() {
     const router = useRouter();
 
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const [repository, setRepository] = useState<Repository[]>([]);
 
     const login = () => {
         fetch('/api/login',
@@ -58,6 +65,19 @@ export default function Home() {
             });
     }
 
+    useEffect(() => {
+        fetch('/api/repository')
+            .then(res => res.json())
+            .then(res => {
+                let data = res as Message<RepositoryResponse>;
+                if (data.status === 200) {
+                    const repository = data.data.repository;
+
+                    setRepository(repository);
+                }
+            });
+    }, []);
+
     return (
         <main style={{backgroundImage: `url("https://i.im.ge/2023/07/17/5jrzzK.F0ci1uZakAAukOL.jpg")`}}
               className={`flex min-h-screen flex-col ${inter.className} bg-fixed bg-cover bg-center`}>
@@ -93,33 +113,38 @@ export default function Home() {
             </div>
             <div className="min-h-screen w-full bg-white flex items-center justify-center">
                 <div className="flex flex-col shadow-xl p-16 gap-8 rounded-xl"
-                     style={{width: '90%', minHeight: '500px'}}>
-                    <p className="text-3xl">eBPF 搜索统计 / 趋势</p>
-                    <div className="flex flex-row items-center justify-center gap-16">
-                        <div className="shadow-xl rounded-xl" style={{width: '48%', height: '320px'}}>
-
-                        </div>
-                        <div className="shadow-xl rounded-xl" style={{width: '48%', height: '320px'}}>
-
-                        </div>
+                     style={{minWidth: '680px', minHeight: '480px'}}>
+                    {
+                        repository.length !== 0
+                            ? repository.map((value, index) => {
+                                return (
+                                    <Row key={index}
+                                         title={`${value.organization}  / ${value.project}`}
+                                         text={value.readme}
+                                         url={`/repository?id=${value.id}`}
+                                    />
+                                )
+                            })
+                            : <div className="flex flex-col items-center justify-center">
+                                <p className="text-2xl">暂无仓库</p>
+                                <p className="text-xl">快去创建一个吧！</p>
+                            </div>
+                    }
+                </div>
+            </div>
+            {
+                <div className="min-h-screen w-full bg-white flex items-center justify-center">
+                    <div className="flex flex-col shadow-xl p-16 gap-8 rounded-xl"
+                         style={{minWidth: '680px', minHeight: '480px'}}>
+                        <p className="text-xl">eBPF 搜索统计 / 趋势</p>
                     </div>
-                    <div className="flex flex-row items-center justify-center gap-16 mt-8">
-                        <div className="shadow-xl rounded-xl" style={{width: '380px', height: '320px'}}>
-
-                        </div>
-                        <div className="shadow-xl rounded-xl" style={{width: '380px', height: '320px'}}>
-
-                        </div>
-                        <div className="shadow-xl rounded-xl" style={{width: '380px', height: '320px'}}>
-
-                        </div>
-                        <div className="shadow-xl rounded-xl" style={{width: '380px', height: '320px'}}>
-
-                        </div>
-                        <div className="shadow-xl rounded-xl" style={{width: '380px', height: '320px'}}>
-
-                        </div>
-                    </div>
+                </div>
+            }
+            <div className="bg-white">
+                <div className="flex flex-col justify-center items-center p-8 m-8">
+                    <p>Powered By eBPF Hub</p>
+                    <p>Open Source On <a className="text-blue-400"
+                                         href="https://github.com/linuxkerneltravel/ebpfs"> Github </a></p>
                 </div>
             </div>
         </main>

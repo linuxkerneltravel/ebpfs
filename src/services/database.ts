@@ -127,11 +127,12 @@ export default class DatabaseService<T> {
     }
 
     public async readRepositoryByLimit(limit: number) {
+        // 选择数据库中前十个数据
         return await this.db
             .selectFrom('repository')
+            .selectAll()
             .orderBy('created', 'desc')
             .limit(limit)
-            .selectAll()
             .execute();
     }
 

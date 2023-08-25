@@ -9,16 +9,27 @@ import SearchService from "@/services/search";
 export default async function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
     if (req.method === 'GET') {
         const {id} = req.query;
-
         const repositories = new DatabaseService();
 
         // 如果没有携带参数则按获取创建时间最新的 10 个仓库
-        if (id === null || id === '') {
+        if (!id || id === '') {
+            const repository = await repositories.readRepositoryByLimit(10) as Repository[];
+
+            // 获取 readme
+            for (const item of repository) {
+                let content = await fetch(item.readme).then(async (response) => response.text());
+                content = content.length > 500
+                    ? content.substring(0, 500).replace(/\n/g, "")
+                    : content.replace(/\n/g, "")
+
+                item.readme = content;
+            }
+
             res.status(200).json(
                 new Message(
                     200,
                     'OK',
-                    {repository: await repositories.readRepositoryByLimit(10) as Repository[]}
+                    {repository: repository}
                 )
             );
 
