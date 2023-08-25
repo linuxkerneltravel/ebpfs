@@ -92,7 +92,9 @@ export default function AccountPage() {
             <div className="flex flex-row justify-center">
                 <div className="bg-white flex flex-col gap-4 p-16 rounded-l-2xl" style={{width: '320px'}}>
                     <div className="flex flex-col justify-center items-center">
-                        <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+                        <img src={
+                            result ? result.account.avatar : "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+                        }
                              className="rounded-full" style={{height: '64px', width: '64px'}} alt=""/>
                     </div>
                     <Button text="添加一个新的包" onclick={() => router.push("/upload")}/>
@@ -106,16 +108,28 @@ export default function AccountPage() {
                 <div className="bg-white flex flex-col p-16 rounded-r-2xl" style={{width: '640px'}}>
                     {
                         result?.repositories && result.repositories.length > 0
-                            ? result?.repositories.map((repository, index) => {
-                                return (
-                                    <div className=""
-                                         style={{height: '32px'}}
-                                         key={index}>
-                                        <div className="font-bold">`${repository.organization} / ${repository.project}`
-                                        </div>
-                                    </div>
-                                )
-                            })
+                            ? <div>
+                                <div className="pb-4">
+                                    <p className="text-xl font-bold">创建的包</p>
+                                    <p className="text-sm text-gray-400">点击更新包</p>
+                                </div>
+                                {
+                                    result?.repositories.map((repository, index) => {
+                                        return (
+                                            <div className=""
+                                                 style={{height: '32px'}}
+                                                 key={index}
+                                                 onClick={() => router.push(`/upload?update_organization=${repository.organization}&update_project=${repository.project}`)}>
+                                                <div className="font-bold">
+                                                    {
+                                                        `${repository.organization} / ${repository.project}`
+                                                    }
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
                             : <div className="flex justify-center items-center">
                                 <div className="font-bold">暂无包</div>
                             </div>
