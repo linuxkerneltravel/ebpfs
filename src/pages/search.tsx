@@ -21,7 +21,8 @@ export default function Search() {
 
     return (
         <main className={`flex min-h-screen flex-col ${inter.className} bg-fixed bg-cover bg-center`}>
-            <div className="min-h-screen w-full backdrop-blur-2xl flex flex-col gap-8 items-center justify-center">
+            <div
+                className="min-h-screen w-full backdrop-blur-2xl flex flex-col gap-8 items-center justify-center mt-32 mb-32">
                 <p className="text-3xl text-gray-600">eBPF Hub Search</p>
                 <div className="flex flex-col gap-4 justify-center items-center">
                     <Searchbar placeholder="开始探索 eBPF Hub 吧！" width="480px" height="42px" indent="16px"/>
