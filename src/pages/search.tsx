@@ -42,6 +42,7 @@ export default function Search() {
                             <Row key=""
                                  title={`${index.organization}  / ${index.project}`}
                                  text={index.content.length > 500 ? index.content.slice(0, 500) : index.content}
+                                 author={index.author}
                                  tags={index.tags}
                                  url={`/repository?id=${index.id}`}
                             />
