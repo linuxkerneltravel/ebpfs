@@ -10,8 +10,14 @@ interface RowProps extends WithRouterProps {
 }
 
 class Row extends Component<RowProps> {
-    constructor(props: RowProps) {
+    constructor(props: RowProps, public text: string) {
         super(props);
+        this.text = this.props.text && (this.props.text.indexOf("summary:") === -1 || this.props.text.slice(this.props.text.indexOf("summary:")).indexOf("---") === -1)
+            ? this.props.text
+            : this.props.text && this.props.text.substring(
+                this.props.text.indexOf("summary") + 9,
+                this.props.text.indexOf("summary") + this.props.text.slice(this.props.text.indexOf("summary:")).indexOf("---")
+            );
     }
 
     render() {
@@ -29,12 +35,7 @@ class Row extends Component<RowProps> {
                 <p className="text-gray-900 text-lg font-bold">{this.props.title}</p>
                 <p className="text-gray-600 text-sm">{
                     // 正则版本：/^summary[\s\S]*?---([\s\S]*)$/.exec(this.props.text)?.[1] || this.props.text
-                    this.props.text.indexOf("summary:") === -1 || this.props.text.slice(this.props.text.indexOf("summary:")).indexOf("---") === -1
-                        ? this.props.text
-                        : this.props.text.substring(
-                            this.props.text.indexOf("summary"),
-                            this.props.text.indexOf("summary") + this.props.text.slice(this.props.text.indexOf("summary:")).indexOf("---")
-                        )
+                    this.text
                 }</p>
                 <div className="flex flex-row flex-wrap gap-2">
                     {
