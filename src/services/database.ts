@@ -3,10 +3,13 @@ import {RepositoryTable} from "@/data/repository";
 import {createKysely} from "@vercel/postgres-kysely";
 import {Account} from "@/common/account";
 import {Repository} from "@/common/repository";
+import {Statistic} from "@/common/statistic";
+import {StatisticTable} from "@/data/statistic";
 
 interface Database {
     account: AccountTable;
     repository: RepositoryTable;
+    statistic: StatisticTable;
 }
 
 export default class DatabaseService<T> {
@@ -52,8 +55,21 @@ export default class DatabaseService<T> {
                 .execute();
         } catch (ignore) {
         }
+
+        try {
+            await this.db.schema.createTable('statistic')
+                .addColumn('id', 'text', col => col.primaryKey())
+                .addColumn('organization', 'text')
+                .addColumn('project', 'text')
+                .addColumn('visit', 'integer')
+                .addColumn('search', 'integer')
+                .addColumn('show', 'integer')
+                .execute();
+        } catch (ignore) {
+        }
     }
 
+    // Account
     public async createAccount({id, openid, nickname, avatar, email, password, type, created}: Account) {
         return await this.db
             .insertInto('account')
@@ -93,6 +109,7 @@ export default class DatabaseService<T> {
             .execute();
     }
 
+    // Repository
     public async createRepository(
         {
             id, account, created, update, organization, project, version,
@@ -163,6 +180,101 @@ export default class DatabaseService<T> {
     public async deleteRepository(id: string) {
         return await this.db
             .deleteFrom('repository')
+            .where('id', '=', id)
+            .execute();
+    }
+
+    // Statistic
+    public async createStatistic({
+        id, organization, project, visit, search, show
+    }: Statistic) {
+        return await this.db
+            .insertInto('statistic')
+            .values({
+                id, organization, project, visit, search, show
+            })
+            .execute();
+    }
+
+    public async readStatistic(id: string) {
+        return await this.db
+            .selectFrom('statistic')
+            .where('id', '=', id)
+            .selectAll()
+            .execute();
+    }
+
+    public async readStatisticByOrganizationAndProject(organization: string, project: string) {
+        return await this.db
+            .selectFrom('statistic')
+            .where('organization', '=', organization)
+            .where('project', '=', project)
+            .selectAll()
+            .execute();
+    }
+
+    public async readStatisticByVisit(limit: number) {
+        return await this.db
+            .selectFrom('statistic')
+            .selectAll()
+            .orderBy('visit', 'desc')
+            .limit(limit)
+            .execute();
+    }
+
+    public async readStatisticBySearch(limit: number) {
+        return await this.db
+            .selectFrom('statistic')
+            .selectAll()
+            .orderBy('search', 'desc')
+            .limit(limit)
+            .execute();
+    }
+
+    public async readStatisticByShow(limit: number) {
+        return await this.db
+            .selectFrom('statistic')
+            .selectAll()
+            .orderBy('show', 'desc')
+            .limit(limit)
+            .execute();
+    }
+
+    public async updateStatistic(
+        queryId: string,
+        {
+            id, organization, project, visit, search, show
+        }: Statistic
+    ) {
+        return await this.db
+            .updateTable('statistic')
+            .set({
+                id, organization, project, visit, search, show
+            })
+            .where('id', '=', queryId)
+            .execute();
+    }
+
+    public async updateStatisticByOrganizationAndProject(
+        organization: string,
+        project: string,
+        {
+            visit, search, show
+        }: Statistic
+    ){
+        return await this.db
+            .updateTable('statistic')
+            .set({
+                visit, search, show
+            })
+            .where('organization', '=', organization)
+            .where('project', '=', project)
+            .execute();
+    }
+
+    public async deleteStatistic(id: string) {
+        return await this.db
+            .deleteFrom('statistic')
             .where('id', '=', id)
             .execute();
     }

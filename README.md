@@ -209,6 +209,42 @@ GET /api/account
 
 **GET /api/repository**
 
+获取 10 个最近创建的仓库。
+
+示例请求：
+
+```
+GET /api/repository
+```
+
+示例返回（假设仅有一个仓库）：
+
+```
+{
+    "status": 200,
+    "message": "OK",
+    "data": {
+        "repository": [
+            {
+                "id": "d564ffba-686b-42b6-ac04-dc89f886ce44",
+                "account": "befd65a6-d5a1-4027-8635-61ac5a465d50",
+                "update": "1691702267986",
+                "organization": "lmp",
+                "project": "bashreadline",
+                "version": "1.0.0",
+                "readme": "https://raw.githubusercontent.com/linuxkerneltravel/lmp/develop/eBPF_Hub/bashreadline/README.md",
+                "type": "wasm",
+                "repository": "https://github.com/linuxkerneltravel/lmp/tree/develop/eBPF_Hub/bashreadline",
+                "entry": "https://raw.githubusercontent.com/linuxkerneltravel/lmp/develop/eBPF_Hub/bashreadline/README.md",
+                "author": "{\"yunwei37\"}",
+                "tags": "{\"bpftools\",\"examples\",\"uprobe\",\"perf event\"}",
+                "created": "1691702269751"
+            }
+        ]
+    }
+}
+```
+
 根据 `query` 的 `id={ID}` 请求仓库的详细信息。
 
 示例请求：
@@ -248,6 +284,10 @@ GET /api/repository?id=d564ffba-686b-42b6-ac04-dc89f886ce44
 **POST /api/repository**
 
 更新或创建新的程序包仓库。
+
+如果 orgabization 字段与 project 字段与先前已经创建的程序包仓库相同将为更新操作。
+
+字段**必须**完整，不可**缺少**参数。
 
 示例请求：
 

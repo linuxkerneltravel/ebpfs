@@ -77,10 +77,12 @@ export default function UploadPage() {
                         <div className="bg-white flex flex-col flex-wrap gap-4 p-16 rounded-2xl"
                              style={{width: '480px'}}>
                             <p className="font-bold text-xl">提交一个仓库 / 更新仓库</p>
-                            <Input placeholder={ update_organization ? update_organization as string : '组织'} height="48px" width="350px" onChange={setOrganization}
+                            <Input placeholder={update_organization ? update_organization as string : '组织'}
+                                   height="48px" width="350px" onChange={setOrganization}
                                    onEnterPress={() => {
                                    }}/>
-                            <Input placeholder={ update_project ? update_project as string : '项目'} height="48px" width="350px" onChange={setProject}
+                            <Input placeholder={update_project ? update_project as string : '项目'} height="48px"
+                                   width="350px" onChange={setProject}
                                    onEnterPress={() => {
                                    }}/>
                             <Input placeholder="版本" height="48px" width="350px" onChange={setVersion}

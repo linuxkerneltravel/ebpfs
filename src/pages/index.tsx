@@ -10,6 +10,7 @@ import {Account} from "@/common/account";
 import {Token} from "@/common/token";
 import {Repository} from "@/common/repository";
 import Row from "@/pages/components/Row";
+import {Statistic} from "@/common/statistic";
 
 const inter = Inter({subsets: ['latin']})
 
@@ -22,12 +23,17 @@ interface RepositoryResponse {
     repository: Repository[];
 }
 
+interface StatisticResponse {
+    statistic: Statistic[];
+}
+
 export default function Home() {
     const router = useRouter();
 
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [repository, setRepository] = useState<Repository[]>([]);
+    const [statistic, setStatistic] = useState<Statistic[]>([]);
 
     const login = () => {
         fetch('/api/login',
@@ -70,12 +76,23 @@ export default function Home() {
             .then(res => res.json())
             .then(res => {
                 let data = res as Message<RepositoryResponse>;
-                if (data.status === 200) {
+                if (data.data && data.data.repository && data.status === 200) {
                     const repository = data.data.repository;
 
                     setRepository(repository);
                 }
             });
+
+        fetch('/api/statistic')
+            .then(res => res.json())
+            .then(res => {
+                let data = res as Message<StatisticResponse>;
+                if (data.data && data.data.statistic && data.status === 200) {
+                    const statistic = data.data.statistic;
+
+                    setStatistic(statistic);
+                }
+            })
     }, []);
 
     return (
@@ -123,6 +140,7 @@ export default function Home() {
                                     <Row key={index}
                                          title={`${value.organization}  / ${value.project}`}
                                          text={value.readme}
+                                         author={value.author}
                                          tags={value.tags}
                                          url={`/repository?id=${value.id}`}
                                     />
@@ -140,6 +158,20 @@ export default function Home() {
                     <div className="flex flex-col shadow-xl p-16 gap-8 rounded-xl m-8"
                          style={{minWidth: '680px', minHeight: '480px'}}>
                         <p className="text-xl">eBPF 搜索统计 / 趋势</p>
+                        <div>
+                            {
+                                statistic.length !== 0
+                                    ? statistic.map((value, index) => {
+                                        return (
+                                            <div key={index}></div>
+                                        )
+                                    })
+                                    : <div className="flex flex-col items-center justify-center">
+                                        <p className="text-2xl">暂无统计数据</p>
+                                        <p className="text-xl">收集数据中</p>
+                                    </div>
+                            }
+                        </div>
                     </div>
                 </div>
             }
