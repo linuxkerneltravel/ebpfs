@@ -149,45 +149,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             // 账号不存在
             if (account.length === 0) {
                 // 发送注册邮件
-                const emailSender = process.env.EMAIL_SENDER;
-                const emailSenderPassword = process.env.EMAIL_SENDER_PASSWORD;
-                const emailSmtpHost = process.env.EMAIL_SMTP_HOST;
-                const emailSmtpPort = process.env.EMAIL_SMTP_PORT;
-                const emailSmtpSecure = process.env.EMAIL_SMTP_SECURE;
-
-                if (emailSender === null || !emailSender) {
-                    res.status(400).json(new Message(400, 'emailSender is invalid.', null));
-                    return;
-                }
-
-                if (emailSenderPassword === null || !emailSenderPassword) {
-                    res.status(400).json(new Message(400, 'emailSenderPassword is invalid.', null));
-                    return;
-                }
-
-                if (emailSmtpHost === null || !emailSmtpHost) {
-                    res.status(400).json(new Message(400, 'emailSmtpHost is invalid.', null));
-                    return;
-                }
-
-                if (emailSmtpPort === null || !emailSmtpPort) {
-                    res.status(400).json(new Message(400, 'emailSmtpPort is invalid.', null));
-                    return;
-                }
-
-                if (emailSmtpSecure === null || !emailSmtpSecure) {
-                    res.status(400).json(new Message(400, 'emailSmtpSecure is invalid.', null));
-                    return;
-                }
-
-                const sender = new EmailService(
-                    emailSender,
-                    emailSenderPassword,
-                    emailSmtpHost,
-                    emailSmtpPort,
-                    Boolean(emailSmtpSecure),
-                );
-
+                const sender = new EmailService();
                 const verifyCode = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
 
                 // 发送邮件
