@@ -15,20 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             return;
         }
 
-        const algoliaApplicationID = process.env.ALGOLIA_APPLICATION_ID;
-        const algoliaAPIKey = process.env.ALGOLIA_API_KEY;
-
-        if (!algoliaApplicationID) {
-            res.status(500).json(new Message(500, 'ALGOLIA_APPLICATION_ID is not set', null));
-            return;
-        }
-
-        if (!algoliaAPIKey) {
-            res.status(500).json(new Message(500, 'ALGOLIA_API_KEY is not set', null));
-            return;
-        }
-
-        const search = new SearchService(algoliaApplicationID, algoliaAPIKey);
+        const search = new SearchService();
         const result = await search.search(query);
 
         res.status(200).json(new Message(200, 'OK', result.hits));
