@@ -14,5 +14,6 @@ export class StatisticTable {
         public search: number,
         // 展示次数
         public show: number
-    ) { }
+    ) {
+    }
 }

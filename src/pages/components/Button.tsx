@@ -16,7 +16,6 @@ class Button extends Component<ButtonProps> {
                 className="shadow-xl flex justify-center items-center transition duration-500 ease-in-out"
                 style={{
                     height: "42px",
-                    borderRadius: "8px",
                     backgroundColor: "#24282f"
                 }}
                 onClick={() => {

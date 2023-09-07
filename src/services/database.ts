@@ -186,8 +186,8 @@ export default class DatabaseService<T> {
 
     // Statistic
     public async createStatistic({
-        id, organization, project, visit, search, show
-    }: Statistic) {
+                                     id, organization, project, visit, search, show
+                                 }: Statistic) {
         return await this.db
             .insertInto('statistic')
             .values({
@@ -261,7 +261,7 @@ export default class DatabaseService<T> {
         {
             visit, search, show
         }: Statistic
-    ){
+    ) {
         return await this.db
             .updateTable('statistic')
             .set({

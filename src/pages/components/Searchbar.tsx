@@ -23,6 +23,7 @@ class Searchbar extends Component<SearchbarProps> {
                     height={this.props.height}
                     width={this.props.width}
                     indent={this.props.indent}
+                    textColor="#fff"
                 />
             </div>
         );

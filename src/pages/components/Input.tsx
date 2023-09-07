@@ -5,11 +5,12 @@ interface Props {
     height: string;
     width: string;
     indent?: string;
+    textColor?: string;
     onChange: (value: string) => void;
     onEnterPress: (value: string) => void;
 }
 
-const Input: React.FC<Props> = ({onChange, onEnterPress, placeholder, height, width, indent}) => {
+const Input: React.FC<Props> = ({onChange, onEnterPress, placeholder, height, width, textColor, indent}) => {
     const [inputValue, setInputValue] = useState('');
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,11 +37,11 @@ const Input: React.FC<Props> = ({onChange, onEnterPress, placeholder, height, wi
                 height: height,
                 width: width,
                 display: 'flex',
-                fontSize: '16px',
+                fontSize: '14px',
                 textIndent: indent ? indent : '10px',
-                color: '#212529',
+                backgroundColor: 'rgba(255, 255, 255, 0.3)',
+                color: textColor ? textColor : '#212529',
                 border: '1px solid #9ca3af',
-                borderRadius: '6px',
             }}
         />
     );

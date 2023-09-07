@@ -16,9 +16,9 @@ class Row extends Component<RowProps> {
         this.text = this.props.text && (this.props.text.indexOf("summary:") === -1 || this.props.text.slice(this.props.text.indexOf("summary:")).indexOf("---") === -1)
             ? this.props.text
             : this.props.text && this.props.text.substring(
-                this.props.text.indexOf("summary") + 9,
-                this.props.text.indexOf("summary") + this.props.text.slice(this.props.text.indexOf("summary:")).indexOf("---")
-            );
+            this.props.text.indexOf("summary") + 9,
+            this.props.text.indexOf("summary") + this.props.text.slice(this.props.text.indexOf("summary:")).indexOf("---")
+        );
     }
 
     render() {
