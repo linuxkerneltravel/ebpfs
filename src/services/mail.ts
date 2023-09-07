@@ -1,5 +1,3 @@
-import Message from "@/common/message";
-
 export default class EmailService {
     config: any = {};
     nodemailer: any;

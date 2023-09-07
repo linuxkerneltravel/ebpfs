@@ -18,9 +18,6 @@ export default function UploadPage() {
     // 如果不为 undefined 则为更新仓库
     const {update_organization, update_project} = router.query;
 
-    console.log(update_organization)
-    console.log(update_project)
-
     //
     // 提交仓库表单
     //

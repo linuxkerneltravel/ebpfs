@@ -2,7 +2,7 @@ import algoliasearch, {SearchClient} from "algoliasearch";
 import {Index} from "@/common";
 
 export default class SearchService {
-    client : SearchClient;
+    client: SearchClient;
 
     constructor() {
         const algoliaApplicationID = process.env.ALGOLIA_APPLICATION_ID;
