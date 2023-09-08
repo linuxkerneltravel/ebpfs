@@ -147,7 +147,7 @@ export default function Home() {
                     {
                         repository.map((value, index) => {
                             return (
-                                <Card key={index} org={value.organization} project={value.project}/>
+                                <Card key={index} org={value.organization} project={value.project} url={`/repository?id=${value.id}`}/>
                             )
                         })
                     }
