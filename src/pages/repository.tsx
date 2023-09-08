@@ -53,7 +53,7 @@ export default function RepositoryPage() {
     return (
         <main className={`flex min-h-screen flex-col ${inter.className} bg-gray-200`}>
             <Navbar src={avatar}/>
-            <div className="min-h-screen w-full backdrop-blur-2xl flex flex-col" style={{paddingTop: '60px'}}>
+            <div className="min-h-screen w-full backdrop-blur-2xl flex flex-col">
                 <div className="w-full bg-white flex flex-row justify-center items-center gap-16"
                      style={{height: '420px'}}>
                     <div id="icon">

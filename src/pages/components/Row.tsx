@@ -23,27 +23,23 @@ class Row extends Component<RowProps> {
 
     render() {
         return (
-            <div className="shadow-xl flex justify-center flex-col gap-4 p-6"
+            <div className="shadow-xl flex justify-center flex-col gap-3 p-6"
                  style={{
                      maxWidth: "680px",
                      minHeight: "180px",
-                     borderRadius: "8px",
                      textOverflow: "ellipsis",
                      overflow: "hidden",
                      whiteSpace: "pre-wrap"
                  }}
                  onClick={e => this.props.router.push(this.props.url)}>
-                <p className="text-gray-900 text-lg font-bold">{this.props.title}</p>
-                <p className="text-gray-600 text-sm">{
-                    // 正则版本：/^summary[\s\S]*?---([\s\S]*)$/.exec(this.props.text)?.[1] || this.props.text
-                    this.text
-                }</p>
-                <div className="flex flex-row">
-                    <div className="flex flex-row flex-wrap gap-2">
-                        {
-                            this.props.tags && this.props.tags.map && this.props.tags.map((value, index) => {
-                                return (
-                                    <div key={index} className="bg-gray-200 rounded-full px-2 py-1 text-gray-600 text-sm">
+                <div>
+                    <p className="text-gray-900 text-lg font-bold">{this.props.title}</p>
+                    {
+                        this.props.author && this.props.author.map && this.props.author.map((value, index) => {
+                            return (
+                                <div key={index} className="flex flex-row gap-1">
+                                    <p className="text-gray-500 text-xs">By</p>
+                                    <div className="text-gray-500 text-xs">
                                         {
                                             value.replace('[', '')
                                                 .replace(']', '')
@@ -53,16 +49,21 @@ class Row extends Component<RowProps> {
                                                 .replace(/,/g, ' ')
                                         }
                                     </div>
-                                )
-                            })
-                        }
-                    </div>
-                    <div className="flex-1"></div>
-                    <div className="flex flex-row justify-end">
+                                </div>
+                            )
+                        })
+                    }
+                </div>
+                <p className="text-gray-600 text-sm">{
+                    // 正则版本：/^summary[\s\S]*?---([\s\S]*)$/.exec(this.props.text)?.[1] || this.props.text
+                    this.text
+                }</p>
+                <div className="flex flex-row">
+                    <div className="flex flex-row flex-wrap gap-2">
                         {
-                            this.props.author && this.props.author.map && this.props.author.map((value, index) => {
+                            this.props.tags && this.props.tags.map && this.props.tags.map((value, index) => {
                                 return (
-                                    <div key={index} className="bg-green-200 rounded-full px-2 py-1 text-gray-600 text-sm">
+                                    <div key={index} className="bg-gray-200 px-2 py-1 text-gray-600 text-xs">
                                         {
                                             value.replace('[', '')
                                                 .replace(']', '')
@@ -77,7 +78,6 @@ class Row extends Component<RowProps> {
                         }
                     </div>
                 </div>
-
             </div>
         );
     }
