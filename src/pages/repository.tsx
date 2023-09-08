@@ -33,6 +33,9 @@ export default function RepositoryPage() {
         fetch(result.readme)
             .then(result => result.text())
             .then(data => {
+                // 裁剪第二个 --- 之后的内容
+                data = data.substring(data.indexOf("---", 4) + 3);
+
                 let dom = document.getElementById('marked');
                 if (dom) dom.innerHTML = marked(data);
             });
@@ -54,40 +57,42 @@ export default function RepositoryPage() {
         <main className={`flex min-h-screen flex-col ${inter.className} bg-gray-200`}>
             <Navbar src={avatar}/>
             <div className="min-h-screen w-full backdrop-blur-2xl flex flex-col">
-                <div className="w-full bg-white flex flex-row justify-center items-center gap-16"
+                <div className="w-full bg-white flex flex-row justify-center items-center"
                      style={{height: '420px'}}>
-                    <div id="icon">
-                        <img src="favicon.ico" className="rounded-full" style={{height: '128px', width: '128px'}}
-                             alt="icon"/>
-                    </div>
-                    <div id="content" className="" style={{width: '70%'}}>
-                        <p className="text-4xl font-bold">{`${result?.organization} / ${result?.project}`}</p>
-                        <div style={{height: '8px'}}/>
-                        <p className="text-gray-400 text-base">{`创建者 ${result?.author.slice(2, result?.author.length - 2)}`}</p>
-                        <p className="text-gray-400 text-base">{`创建于 ${new Date((result !== undefined && result.created !== undefined) ? parseInt(result.created) : new Date().getTime())}`}</p>
-                        <p className="text-gray-400 text-base">{`代码仓库 ${result?.repository}`}</p>
-                        <p className="text-gray-400 text-base">{`版本 ${result?.version}`}</p>
-                        <div style={{height: '24px'}}/>
-                        <div className="flex justify-center items-center rounded-16 bg-gray-50 border-gray-900"
-                             style={{width: '220px', minHeight: '48px'}}>
-                            <p>{`ecli run ${result?.organization}/${result?.project}`}</p>
+                    <div className="flex flex-row gap-16 items-center" style={{width: '50%', minWidth: "960px"}}>
+                        <div id="icon">
+                            <img src="favicon.ico" className="rounded-full" style={{height: '72px', width: '72px'}}
+                                 alt="icon"/>
+                        </div>
+                        <div id="content">
+                            <p className="text-2xl font-bold">{`${result?.organization} / ${result?.project}`}</p>
+                            <div style={{height: '8px'}}/>
+                            <p className="text-gray-400 text-sm">{`创建者 ${result?.author.slice(2, result?.author.length - 2)}`}</p>
+                            <p className="text-gray-400 text-sm">{`创建于 ${new Date((result !== undefined && result.created !== undefined) ? parseInt(result.created) : new Date().getTime())}`}</p>
+                            <p className="text-gray-400 text-sm">{`代码仓库 ${result?.repository}`}</p>
+                            <p className="text-gray-400 text-sm">{`版本 ${result?.version}`}</p>
+                            <div style={{height: '24px'}}/>
+                            <div className="flex justify-center items-center rounded-16 bg-gray-50 border-gray-900"
+                                 style={{width: '220px', minHeight: '48px'}}>
+                                <p>{`ecli run ${result?.organization}/${result?.project}`}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div className="w-full flex justify-center items-center bg-white" style={{height: '48px'}}>
-                    <div className="h-full" style={{width: '70%'}}>
+                <div className="w-full flex justify-center items-center bg-white" style={{height: '36px'}}>
+                    <div className="h-full" style={{width: '50%', minWidth: "960px"}}>
                         <div className="flex justify-center items-center bg-gray-50"
-                             style={{height: '48px', width: '128px', borderBottom: '8px solid #edb74d'}}>
-                            <p className="text-sm font-bold">README</p>
+                             style={{height: '36px', width: '108px', borderBottom: '4px solid #edb74d'}}>
+                            <p className="text-xs">README</p>
                         </div>
                     </div>
                 </div>
-                <div className="flex justify-center items-center mt-12">
+                <div className="flex justify-center items-center mt-12 mb-12">
                     {
                         result
-                            ? <div id="marked" className="bg-white p-16 rounded-xl" style={{width: '70%'}}/>
-                            : <div className="bg-white p-16 rounded-xl flex justify-center items-center"
-                                   style={{width: '70%'}}>
+                            ? <div id="marked" className="markdown bg-white p-32" style={{width: '50%', minWidth: "960px"}}/>
+                            : <div className="bg-white p-16 flex justify-center items-center"
+                                   style={{width: '50%', minWidth: "960px"}}>
                                 <p className="text-2xl font-bold">该仓库未收录</p>
                             </div>
                     }

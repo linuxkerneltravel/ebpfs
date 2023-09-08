@@ -23,7 +23,7 @@ class Row extends Component<RowProps> {
 
     render() {
         return (
-            <div className="shadow-xl flex justify-center flex-col gap-3 p-6"
+            <div className="shadow-lg flex justify-center flex-col gap-3 p-6"
                  style={{
                      maxWidth: "680px",
                      minHeight: "180px",
