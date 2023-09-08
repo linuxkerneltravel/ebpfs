@@ -12,10 +12,10 @@ export default class Navbar extends Component<NavbarProps, {}> {
     render() {
         return (
             <div
-                className={this.props.isGlass ? "bg-[#22219B] z-50 w-full flex justify-center items-center" : "z-50 w-full flex justify-center items-center"}
+                className="bg-[#22219B] z-50 w-full flex justify-center items-center"
                 style={{height: "60px"}}>
                 <div className="flex flex-row items-center">
-                    <Searchbar placeholder="搜索 eBPF 程序" height="36px" width="380px"/>
+                    <Searchbar placeholder="搜索 eBPF 程序" height="36px" width="380px" textColor={"#fff"}/>
                     <div style={{width: "620px"}}></div>
                     <p className="text-white mr-3 ml-3">文档</p>
                     <p className="text-white mr-3 ml-3">关于</p>

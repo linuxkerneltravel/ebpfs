@@ -9,6 +9,7 @@ interface SearchbarProps extends WithRouterProps {
     height: string;
     width: string;
     indent?: string;
+    textColor?: string;
 }
 
 class Searchbar extends Component<SearchbarProps> {
@@ -23,7 +24,7 @@ class Searchbar extends Component<SearchbarProps> {
                     height={this.props.height}
                     width={this.props.width}
                     indent={this.props.indent}
-                    textColor="#fff"
+                    textColor={this.props.textColor}
                 />
             </div>
         );
