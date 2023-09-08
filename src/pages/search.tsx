@@ -63,7 +63,9 @@ export default function Search() {
                                textColor="#000"/>
                     <p className="text-gray-400 text-xs">按下 Enter 键进行搜索</p>
                 </div>
-                {(!query) && <img src="https://github.com/images/modules/search/home-desktop-light.webp" alt=""/>}
+                {
+                    (!query) && <img src="https://github.com/images/modules/search/home-desktop-light.webp" alt=""/>
+                }
                 {
                     (query && !result) &&
                     <div className="flex justify-center items-center">
@@ -72,8 +74,8 @@ export default function Search() {
                 }
                 {
                     (query && result) &&
-                    <div className="flex flex-row">
-                        <div className="flex flex-col gap-3 pl-4 pr-4" style={{minWidth: "280px"}}>
+                    <div className="flex flex-row gap-4 justify-center">
+                        <div className="flex flex-col gap-3" style={{minWidth: "320px"}}>
                             <div>
                                 <p className="text-xl font-bold">过滤器</p>
                                 <p className="text-sm">整理当前的搜索结果</p>
