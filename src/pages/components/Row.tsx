@@ -25,7 +25,7 @@ class Row extends Component<RowProps> {
         return (
             <div className="shadow-lg flex justify-center flex-col gap-3 p-6"
                  style={{
-                     maxWidth: "680px",
+                     maxWidth: "880px",
                      minHeight: "180px",
                      textOverflow: "ellipsis",
                      overflow: "hidden",
