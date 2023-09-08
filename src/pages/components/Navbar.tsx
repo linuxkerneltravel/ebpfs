@@ -17,8 +17,9 @@ export default class Navbar extends Component<NavbarProps, {}> {
                 <div className="flex flex-row items-center">
                     <Searchbar placeholder="搜索 eBPF 程序" height="36px" width="380px" textColor={"#fff"}/>
                     <div style={{width: "620px"}}></div>
+                    <p className="text-white mr-3 ml-3">搜索</p>
                     <p className="text-white mr-3 ml-3">文档</p>
-                    <p className="text-white mr-3 ml-3">关于</p>
+                    <p className="text-white mr-6 ml-3">关于</p>
                     <Avatar src={this.props.src} alt={this.props.alt}/>
                 </div>
             </div>

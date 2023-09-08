@@ -6,14 +6,21 @@ import {Index} from "@/common";
 import Message from "@/common/message";
 import Row from "@/pages/components/Row";
 import Loading from "@/pages/components/Loading";
+import {State} from "@/pages/_app";
+import Navbar from "@/pages/components/Navbar";
 
 const inter = Inter({subsets: ['latin']})
 
 export default function Search() {
+    (function () {
+        State.load()
+    }());
+
     const {query} = useRouter().query;
     const [result, setResult] = useState<Index[]>()
     const [tags, setTags] = useState<string[]>()
     const [authors, setAuthors] = useState<string[]>()
+    const avatar = State.account?.avatar ? State.account.avatar : `https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png`;
 
     if (query && !result) {
         fetch('/api/search?query=' + query)
@@ -47,6 +54,7 @@ export default function Search() {
 
     return (
         <main className={`flex min-h-screen flex-col ${inter.className} bg-fixed bg-cover bg-center`}>
+            <Navbar src={avatar}/>
             <div
                 className="min-h-screen w-full backdrop-blur-2xl flex flex-col gap-8 items-center justify-center mt-16 mb-16">
                 <p className="text-3xl text-gray-600">eBPF Hub Search</p>
