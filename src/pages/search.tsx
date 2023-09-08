@@ -130,6 +130,13 @@ export default function Search() {
                     </div>
                 }
             </div>
+            <div className="bg-white">
+                <div className="flex flex-col justify-center items-center p-8 m-8">
+                    <p>Powered By eBPF Hub</p>
+                    <p>Open Source On <a className="text-blue-400"
+                                         href="https://github.com/linuxkerneltravel/ebpfs"> Github </a></p>
+                </div>
+            </div>
         </main>
     )
 }
