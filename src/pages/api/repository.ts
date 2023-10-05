@@ -11,6 +11,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         const {id, organization, project} = req.query;
         const repositories = new DatabaseService();
 
+        if (id) {
+            const repo = await repositories.readRepository(id as string) as Repository[];
+            res.status(200).json(new Message(200, 'OK', {repository: repo}));
+
+            return;
+        }
+
+        if (organization && project) {
+            const repos = await repositories.readRepositoryByOrganizationAndProject(organization as string, project as string) as Repository[];
+            res.status(200).json(new Message(200, 'OK', {repository: repos}));
+
+            return;
+        }
+
         // 如果没有携带参数则按获取创建时间最新的 10 个仓库
         if (!id || id === '') {
             const repository = await repositories.readRepositoryByLimit(10) as Repository[];
@@ -37,20 +51,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                     {repository: repository}
                 )
             );
-
-            return;
-        }
-
-        if (id) {
-            const repo = await repositories.readRepository(id as string) as Repository[];
-            res.status(200).json(new Message(200, 'OK', {repository: repo}));
-
-            return;
-        }
-
-        if (organization && project) {
-            const repos = await repositories.readRepositoryByOrganizationAndProject(organization as string, project as string) as Repository[];
-            res.status(200).json(new Message(200, 'OK', {repository: repos}));
 
             return;
         }
