@@ -8,7 +8,7 @@ import SearchService from "@/services/search";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
     if (req.method === 'GET') {
-        const {id} = req.query;
+        const {id, organization, project} = req.query;
         const repositories = new DatabaseService();
 
         // 如果没有携带参数则按获取创建时间最新的 10 个仓库
@@ -41,8 +41,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             return;
         }
 
-        const repo = await repositories.readRepository(id as string) as Repository[];
-        res.status(200).json(new Message(200, 'OK', {repository: repo}));
+        if (id) {
+            const repo = await repositories.readRepository(id as string) as Repository[];
+            res.status(200).json(new Message(200, 'OK', {repository: repo}));
+
+            return;
+        }
+
+        if (organization && project) {
+            const repos = await repositories.readRepositoryByOrganizationAndProject(organization as string, project as string) as Repository[];
+            res.status(200).json(new Message(200, 'OK', {repository: repos}));
+
+            return;
+        }
+
+        res.status(404).json(new Message(404, 'not found', null));
     } else if (req.method === 'POST') {
         // 根据 Token 获取账号 ID
         const header = req.headers['authorization'];

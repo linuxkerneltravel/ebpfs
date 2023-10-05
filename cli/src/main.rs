@@ -1,6 +1,8 @@
 use std::env;
 use colored::Colorize;
 use std::error::Error;
+use std::io::{BufRead, BufReader, ErrorKind};
+use std::process::{Command, Stdio};
 use serde::{Deserialize, Serialize};
 
 static mut DATA: Vec<Index> = Vec::new();
@@ -16,8 +18,8 @@ async fn main() {
         format!("   {} {} {}", "help", "".yellow(), "Display this help".cyan()),
         format!("   {} {} {}", "search", "<keyword>".yellow(), "Search for a keyword".cyan()),
         format!("   {} {} {}", "run", "<org> <project>".yellow(), "Run target project (using Docker)".cyan()),
-        format!("   {} {} {}", "run", "<path>".yellow(), "Run target file".cyan()),
-        format!("   {} {} {}", "run", "<id>".yellow(), "Get ebpf package by id".cyan()),
+        format!("   {} {} {}", "run", "<path>".yellow(), "Run target file (NOT YET IMPL)".cyan()),
+        format!("   {} {} {}", "run", "<id>".yellow(), "Get ebpf package by id (using Docker)".cyan()),
     ];
 
     if args.len() < 2 {
@@ -81,6 +83,17 @@ async fn repository(id: &str) -> Result<String, Box<dyn Error>> {
     Ok(res)
 }
 
+async fn repository_with_org_and_project(organization: &str, project: &str) -> Result<String, Box<dyn Error>> {
+    let res =
+        reqwest::Client::builder()
+            .build()
+            .get(&format!("https://ebpfs.vercel.app/repository?organization={}project={}", organization, project))
+            .send().await?
+            .text().await?;
+
+    Ok(res)
+}
+
 // 裁剪搜索结果
 fn trim(text: &str) -> String {
     if let Some(summary_index) = text.find("summary:") {
@@ -92,10 +105,22 @@ fn trim(text: &str) -> String {
 }
 
 // 执行 Docker 快速启动 ebpf 包
-fn exec() {}
-
 // 从 repo 获取 docker image
-fn get_image() {}
+fn exec(loc: &str) {
+    let stdout = Command::new("docker")
+        .args(&["run", "-it", loc])
+        .stdout(Stdio::piped())
+        .spawn()?
+        .stdout
+        .ok_or_else(|| Error::new(ErrorKind::Other,"Could not capture standard output."))?;
+
+    let reader = BufReader::new(stdout);
+
+    reader
+        .lines()
+        .filter_map(|line| line.ok())
+        .for_each(|line| println!("{}", line));
+}
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Message {
