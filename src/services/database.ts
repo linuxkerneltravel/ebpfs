@@ -1,15 +1,15 @@
-import {AccountTable, AccountType} from "@/data/account";
-import {RepositoryTable} from "@/data/repository";
-import {createKysely} from "@vercel/postgres-kysely";
-import {Account} from "@/common/account";
-import {Repository} from "@/common/repository";
-import {Statistic} from "@/common/statistic";
-import {StatisticTable} from "@/data/statistic";
+import {AccountTable, AccountType} from "@/data/account"
+import {RepositoryTable} from "@/data/repository"
+import {createKysely} from "@vercel/postgres-kysely"
+import {Account} from "@/common/account"
+import {Repository} from "@/common/repository"
+import {Statistic} from "@/common/statistic"
+import {StatisticTable} from "@/data/statistic"
 
 interface Database {
-    account: AccountTable;
-    repository: RepositoryTable;
-    statistic: StatisticTable;
+    account: AccountTable
+    repository: RepositoryTable
+    statistic: StatisticTable
 }
 
 export default class DatabaseService<T> {
@@ -36,8 +36,7 @@ export default class DatabaseService<T> {
                 .addColumn('author', 'text')
                 .addColumn('tags', 'text')
                 .addColumn('created', 'bigint')
-                .execute();
-
+                .execute()
 
         } catch (ignore) {
         }
@@ -52,7 +51,7 @@ export default class DatabaseService<T> {
                 .addColumn('password', 'text')
                 .addColumn('type', 'text')
                 .addColumn('created', 'bigint')
-                .execute();
+                .execute()
         } catch (ignore) {
         }
 
@@ -64,7 +63,7 @@ export default class DatabaseService<T> {
                 .addColumn('visit', 'integer')
                 .addColumn('search', 'integer')
                 .addColumn('show', 'integer')
-                .execute();
+                .execute()
         } catch (ignore) {
         }
     }
@@ -74,7 +73,7 @@ export default class DatabaseService<T> {
         return await this.db
             .insertInto('account')
             .values({id, openid, nickname, avatar, email, password, type, created})
-            .execute();
+            .execute()
     }
 
     public async readAccount(query: string, type: AccountType) {
@@ -83,7 +82,7 @@ export default class DatabaseService<T> {
             // 按照类型查询 openid（目前就 Github 一种） 或者 email
             .where(type === AccountType.GITHUB ? 'openid' : 'email', '=', query)
             .selectAll()
-            .execute();
+            .execute()
     }
 
     public async readAccountById(id: string) {
@@ -91,7 +90,7 @@ export default class DatabaseService<T> {
             .selectFrom('account')
             .where('id', '=', id)
             .selectAll()
-            .execute();
+            .execute()
     }
 
     public async updateAccount(queryId: string, {id, openid, nickname, avatar, type, created}: Account) {
@@ -99,14 +98,14 @@ export default class DatabaseService<T> {
             .updateTable('account')
             .set({id, openid, nickname, avatar, type, created})
             .where('id', '=', queryId)
-            .execute();
+            .execute()
     }
 
     public async deleteAccount(queryId: string) {
         return await this.db
             .deleteFrom('account')
             .where('id', '=', queryId)
-            .execute();
+            .execute()
     }
 
     // Repository
@@ -122,7 +121,7 @@ export default class DatabaseService<T> {
                 id, account, created, update, organization, project, version,
                 readme, type, repository, entry, author, tags
             })
-            .execute();
+            .execute()
     }
 
     public async readRepository(id: string) {
@@ -130,7 +129,7 @@ export default class DatabaseService<T> {
             .selectFrom('repository')
             .where('id', '=', id)
             .selectAll()
-            .execute();
+            .execute()
     }
 
     public async readRepositoryByOrganizationAndProject(organization: string, project: string) {
@@ -139,7 +138,7 @@ export default class DatabaseService<T> {
             .where('organization', '=', organization)
             .where('project', '=', project)
             .selectAll()
-            .execute();
+            .execute()
     }
 
     public async readRepositoryByAccount(account: string) {
@@ -147,7 +146,7 @@ export default class DatabaseService<T> {
             .selectFrom('repository')
             .selectAll()
             .where('account', '=', account)
-            .execute();
+            .execute()
     }
 
     public async readRepositoryByLimit(limit: number) {
@@ -157,7 +156,7 @@ export default class DatabaseService<T> {
             .selectAll()
             .orderBy('created', 'desc')
             .limit(limit)
-            .execute();
+            .execute()
     }
 
     public async updateRepository(
@@ -174,14 +173,14 @@ export default class DatabaseService<T> {
                 readme, type, repository, entry, author, tags
             })
             .where('id', '=', queryId)
-            .execute();
+            .execute()
     }
 
     public async deleteRepository(id: string) {
         return await this.db
             .deleteFrom('repository')
             .where('id', '=', id)
-            .execute();
+            .execute()
     }
 
     // Statistic
@@ -193,7 +192,7 @@ export default class DatabaseService<T> {
             .values({
                 id, organization, project, visit, search, show
             })
-            .execute();
+            .execute()
     }
 
     public async readStatistic(id: string) {
@@ -201,7 +200,7 @@ export default class DatabaseService<T> {
             .selectFrom('statistic')
             .where('id', '=', id)
             .selectAll()
-            .execute();
+            .execute()
     }
 
     public async readStatisticByOrganizationAndProject(organization: string, project: string) {
@@ -210,7 +209,7 @@ export default class DatabaseService<T> {
             .where('organization', '=', organization)
             .where('project', '=', project)
             .selectAll()
-            .execute();
+            .execute()
     }
 
     public async readStatisticByVisit(limit: number) {
@@ -219,7 +218,7 @@ export default class DatabaseService<T> {
             .selectAll()
             .orderBy('visit', 'desc')
             .limit(limit)
-            .execute();
+            .execute()
     }
 
     public async readStatisticBySearch(limit: number) {
@@ -228,7 +227,7 @@ export default class DatabaseService<T> {
             .selectAll()
             .orderBy('search', 'desc')
             .limit(limit)
-            .execute();
+            .execute()
     }
 
     public async readStatisticByShow(limit: number) {
@@ -237,7 +236,7 @@ export default class DatabaseService<T> {
             .selectAll()
             .orderBy('show', 'desc')
             .limit(limit)
-            .execute();
+            .execute()
     }
 
     public async updateStatistic(
@@ -252,7 +251,7 @@ export default class DatabaseService<T> {
                 id, organization, project, visit, search, show
             })
             .where('id', '=', queryId)
-            .execute();
+            .execute()
     }
 
     public async updateStatisticByOrganizationAndProject(
@@ -269,13 +268,13 @@ export default class DatabaseService<T> {
             })
             .where('organization', '=', organization)
             .where('project', '=', project)
-            .execute();
+            .execute()
     }
 
     public async deleteStatistic(id: string) {
         return await this.db
             .deleteFrom('statistic')
             .where('id', '=', id)
-            .execute();
+            .execute()
     }
 }

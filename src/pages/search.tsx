@@ -1,26 +1,26 @@
 import {Inter} from 'next/font/google'
-import Searchbar from "@/pages/components/Searchbar";
-import {useRouter} from "next/router";
-import {useState} from "react";
-import {Index} from "@/common";
-import Message from "@/common/message";
-import Row from "@/pages/components/Row";
-import Loading from "@/pages/components/Loading";
-import {State} from "@/pages/_app";
-import Navbar from "@/pages/components/Navbar";
+import Searchbar from "@/pages/components/Searchbar"
+import {useRouter} from "next/router"
+import {useState} from "react"
+import {Index} from "@/common"
+import Message from "@/common/message"
+import Row from "@/pages/components/Row"
+import Loading from "@/pages/components/Loading"
+import {State} from "@/pages/_app"
+import Navbar from "@/pages/components/Navbar"
 
 const inter = Inter({subsets: ['latin']})
 
 export default function Search() {
     (function () {
         State.load()
-    }());
+    }())
 
     const {query} = useRouter().query;
     const [result, setResult] = useState<Index[]>()
     const [tags, setTags] = useState<string[]>()
     const [authors, setAuthors] = useState<string[]>()
-    const avatar = State.account?.avatar ? State.account.avatar : `https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png`;
+    const avatar = State.account?.avatar ? State.account.avatar : `https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png`
 
     if (query && !result) {
         fetch('/api/search?query=' + query)
@@ -32,24 +32,24 @@ export default function Search() {
                 data && data.data.forEach((index) => {
                     index.tags?.forEach(tag => {
                         if (t.indexOf(tag) === -1) {
-                            t.push(tag);
+                            t.push(tag)
                         }
-                    });
-                });
+                    })
+                })
 
-                setTags(t);
+                setTags(t)
 
                 let a: string[] = [];
                 data && data.data.forEach((index) => {
                     index.author?.forEach(author => {
                         if (a.indexOf(author) === -1) {
-                            a.push(author);
+                            a.push(author)
                         }
-                    });
+                    })
                 })
 
-                setAuthors(a);
-            });
+                setAuthors(a)
+            })
     }
 
     return (

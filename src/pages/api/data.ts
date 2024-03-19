@@ -1,8 +1,11 @@
-import {NextApiRequest, NextApiResponse} from "next";
+import {NextApiRequest, NextApiResponse} from "next"
 import Message from "@/common/message";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
-    if (req.method === 'GET') {
-        res.status(200).json(new Message(200, 'OK', null));
-    } else res.status(400).json(new Message(400, 'request method not match.', null));
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Message<any>>) {
+    if (req.method !== 'GET') {
+        res.status(400).json({status: 400, message: 'request method not match.', data: null})
+        return
+    }
+
+    res.status(200).json({status: 200, message: 'OK', data: null})
 }

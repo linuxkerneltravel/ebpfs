@@ -1,13 +1,13 @@
 import {Inter} from 'next/font/google'
-import Navbar from "@/pages/components/Navbar";
-import {useRouter} from "next/router";
-import {useState} from "react";
-import {Repository} from "@/common/repository";
-import {State} from "@/pages/_app";
-import {marked} from "marked";
-import Message from "@/common/message";
+import Navbar from "@/pages/components/Navbar"
+import {useRouter} from "next/router"
+import {useState} from "react"
+import {Repository} from "@/common/repository"
+import {State} from "@/pages/_app"
+import {marked} from "marked"
+import Message from "@/common/message"
 
-const inter = Inter({subsets: ['latin']});
+const inter = Inter({subsets: ['latin']})
 
 interface RepositoryData {
     repository: Repository[]
@@ -16,41 +16,41 @@ interface RepositoryData {
 export default function RepositoryPage() {
     (function () {
         State.load()
-    }());
+    }())
 
-    const {id} = useRouter().query;
-    const [result, setResult] = useState<Repository>();
-    const avatar = State.account?.avatar ? State.account.avatar : `https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png`;
+    const {id} = useRouter().query
+    const [result, setResult] = useState<Repository>()
+    const avatar = State.account?.avatar ? State.account.avatar : `https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png`
 
     marked.setOptions({
         renderer: new marked.Renderer(),
         gfm: true,          // 允许 Git Hub标准的markdown.
         pedantic: false,    // 不纠正原始模型任何的不良行为和错误
         breaks: false,      // 允许回车换行
-    });
+    })
 
     if (typeof window !== "undefined" && result?.readme) {
         fetch(result.readme)
             .then(result => result.text())
             .then(data => {
                 // 裁剪第二个 --- 之后的内容
-                data = data.substring(data.indexOf("---", 4) + 3);
+                data = data.substring(data.indexOf("---", 4) + 3)
 
-                let dom = document.getElementById('marked');
+                let dom = document.getElementById('marked')
                 if (dom) dom.innerHTML = marked(data);
-            });
+            })
     }
 
     if (id && !result) {
         fetch('/api/repository?id=' + id)
             .then(result => result.json() as Promise<Message<RepositoryData>>)
             .then(data => {
-                console.log(data);
+                console.log(data)
 
                 if (data.status === 200 && data.data.repository.length > 0) {
-                    setResult(data.data.repository[0]);
+                    setResult(data.data.repository[0])
                 }
-            });
+            })
     }
 
     return (

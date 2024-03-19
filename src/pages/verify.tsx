@@ -1,44 +1,44 @@
-import {State} from "@/pages/_app";
-import {useState} from "react";
-import Button from "@/pages/components/Button";
-import {Inter} from "next/font/google";
-import Input from "@/pages/components/Input";
-import {useRouter} from "next/router";
-import {Account} from "@/common/account";
-import {Token} from "@/common/token";
-import Message from "@/common/message";
+import {State} from "@/pages/_app"
+import {useState} from "react"
+import Button from "@/pages/components/Button"
+import {Inter} from "next/font/google"
+import Input from "@/pages/components/Input"
+import {useRouter} from "next/router"
+import {Account} from "@/common/account"
+import {Token} from "@/common/token"
+import Message from "@/common/message"
 
 const inter = Inter({subsets: ['latin']})
 
 interface LoginResponse {
-    account: Account;
-    token: Token;
+    account: Account
+    token: Token
 }
 
 export default function VerifyPage() {
     (function () {
         State.load()
-    }());
+    }())
 
-    const router = useRouter();
-    const {email, password} = router.query;
+    const router = useRouter()
+    const {email, password} = router.query
 
     // 组织
-    const [code, setCode] = useState<string>('');
+    const [code, setCode] = useState<string>('')
 
     const submit = () => {
         fetch(`/api/verify?email=${email}&password=${password}&code=${code}`)
             .then(result => result.json())
             .then(res => {
-                let data = res as Message<LoginResponse>;
+                let data = res as Message<LoginResponse>
 
                 if (data.status === 200) {
-                    State.token = data.data.token;
-                    State.account = data.data.account;
+                    State.token = data.data.token
+                    State.account = data.data.account
 
-                    return router.push('/account');
+                    return router.push('/account')
                 }
-            });
+            })
     };
 
     return (

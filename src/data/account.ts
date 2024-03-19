@@ -1,5 +1,5 @@
-import {Generated} from "kysely";
-import crypto from "crypto";
+import {Generated} from "kysely"
+import crypto from "crypto"
 
 export class AccountTable {
     constructor(

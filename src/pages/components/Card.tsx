@@ -1,10 +1,9 @@
-import {Component} from "react";
-import Link from "next/link";
+import {Component} from "react"
 
 interface CardProps {
-    project: string;
-    org: string;
-    url: string;
+    project: string
+    org: string
+    url: string
 }
 
 export default class Card extends Component<CardProps, {}> {

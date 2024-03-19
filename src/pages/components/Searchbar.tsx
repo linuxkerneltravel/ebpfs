@@ -1,15 +1,15 @@
-import {Component} from "react";
-import Input from "@/pages/components/Input";
-import {withRouter} from "next/router";
-import {WithRouterProps} from "next/dist/client/with-router";
+import {Component} from "react"
+import Input from "@/pages/components/Input"
+import {withRouter} from "next/router"
+import {WithRouterProps} from "next/dist/client/with-router"
 
 
 interface SearchbarProps extends WithRouterProps {
-    placeholder: string;
-    height: string;
-    width: string;
-    indent?: string;
-    textColor?: string;
+    placeholder: string
+    height: string
+    width: string
+    indent?: string
+    textColor?: string
 }
 
 class Searchbar extends Component<SearchbarProps> {
@@ -31,4 +31,4 @@ class Searchbar extends Component<SearchbarProps> {
     }
 }
 
-export default withRouter(Searchbar);
+export default withRouter(Searchbar)

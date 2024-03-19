@@ -1,78 +1,65 @@
 import type {NextApiRequest, NextApiResponse} from 'next'
-import Message from "@/common/message";
-import CacheService from "@/services/cache";
-import {Token} from "@/common/token";
-import {Repository} from "@/common/repository";
-import DatabaseService from "@/services/database";
-import SearchService from "@/services/search";
+import CacheService from "@/services/cache"
+import {Token} from "@/common/token"
+import {Repository} from "@/common/repository"
+import DatabaseService from "@/services/database"
+import SearchService from "@/services/search"
+import Message from "@/common/message"
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Message<any>>) {
     if (req.method === 'GET') {
-        const {id, organization, project} = req.query;
-        const repositories = new DatabaseService();
-
-        if (id) {
-            const repo = await repositories.readRepository(id as string) as Repository[];
-            res.status(200).json(new Message(200, 'OK', {repository: repo}));
-
-            return;
-        }
-
-        if (organization && project) {
-            const repos = await repositories.readRepositoryByOrganizationAndProject(organization as string, project as string) as Repository[];
-            res.status(200).json(new Message(200, 'OK', {repository: repos}));
-
-            return;
-        }
+        const {id} = req.query
+        const repositories = new DatabaseService()
 
         // 如果没有携带参数则按获取创建时间最新的 10 个仓库
         if (!id || id === '') {
-            const repository = await repositories.readRepositoryByLimit(10) as Repository[];
+            const repository = await repositories.readRepositoryByLimit(10) as Repository[]
 
             // 获取 readme
             for (const item of repository) {
-                let content = await fetch(item.readme).then(async (response) => response.text());
+                let content = await fetch(item.readme).then(async (response) => response.text())
                 content = content.length > 500
                     ? content.substring(0, 500).replace(/\n/g, "")
                     : content.replace(/\n/g, "")
 
-                item.readme = content;
+                item.readme = content
                 // 将 tags 和 author 从字符串转换为数组
                 // @ts-ignore
-                item.tags = item.tags.split(',');
+                item.tags = item.tags.split(',')
                 // @ts-ignore
-                item.author = item.author.split(',');
+                item.author = item.author.split(',')
             }
 
             res.status(200).json(
-                new Message(
-                    200,
-                    'OK',
-                    {repository: repository}
-                )
+                {
+                    status: 200,
+                    message: 'OK',
+                    data: {repository: repository}
+                }
             );
 
             return;
         }
 
-        res.status(404).json(new Message(404, 'not found', null));
+        const repo = await repositories.readRepository(id as string) as Repository[]
+        res.status(200).json({status: 200, message: 'OK', data: {repository: repo}})
     } else if (req.method === 'POST') {
         // 根据 Token 获取账号 ID
-        const header = req.headers['authorization'];
+        const header = req.headers['authorization']
 
         if (header === undefined || header === null) {
-            res.status(400).json(new Message(400, 'token is invalid.', null));
-            return;
+            res.status(400).json({status: 400, message: 'token is invalid.', data: null})
+            return
         }
 
-        const tokens = new CacheService<Token>();
-        const repositories = new DatabaseService();
+        const tokens = new CacheService<Token>()
+        const repositories = new DatabaseService()
 
-        const token = await tokens.get(header as string) as Token;
+        const token = await tokens.get(header as string) as Token
 
         if (token === undefined || token === null) {
-            res.status(400).json(new Message(400, 'token is invalid.', null));
-            return;
+            res.status(400).json({status: 400, message: 'token is invalid.', data: null})
+            return
         }
 
         // 解构 form-data
@@ -80,27 +67,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             update, organization, project,
             version, readme, type, repository,
             entry, author, tags
-        }: Repository = req.body;
+        }: Repository = req.body
 
         // 初始化搜索服务
-        const search = new SearchService();
+        const search = new SearchService()
         // 获取 readme
-        const content = await fetch(readme).then(async (response) => response.text());
+        const content = await fetch(readme).then(async (response) => response.text())
 
         // 检查是否已经存在
-        const repos = await repositories.readRepositoryByOrganizationAndProject(organization, project) as Repository[];
+        const repos = await repositories.readRepositoryByOrganizationAndProject(organization, project) as Repository[]
 
         if (repos && repos.length !== 0) {
-            let match = repos.filter((item) => item.account === token.belong);
+            let match = repos.filter((item) => item.account === token.belong)
 
             // 意味着仓库重名
             if (match && match.length !== 0) {
-                res.status(400).json(new Message(400, 'repository is already exists.', null));
-                return;
+                res.status(400).json({status: 400, message: 'repository is already exists.', data: null})
+                return
             }
 
             // 不重名则更新
-            const repo = repos[0];
+            const repo = repos[0]
 
             await repositories.updateRepository(repo.id, {
                 id: repo.id,
@@ -116,7 +103,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                 entry: entry,
                 author: author,
                 tags: tags
-            });
+            })
 
             await search.update({
                 id: repo.id,
@@ -130,10 +117,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                     : content.replace(/\n/g, ""),
                 author: repo.author,
                 tags: repo.tags
-            });
+            })
 
-            res.status(200).json(new Message(200, 'OK', repo));
-            return;
+            res.status(200).json({status: 200, message: 'OK', data: repo})
+            return
         } else {
             const repo = new Repository(
                 crypto.randomUUID(),
@@ -151,7 +138,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                 tags
             )
 
-            await repositories.createRepository(repo);
+            await repositories.createRepository(repo)
             await search.upload({
                 id: repo.id,
                 url: repo.repository,
@@ -164,9 +151,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                     : content.replace(/\n/g, ""),
                 author: repo.author,
                 tags: repo.tags
-            });
+            })
 
-            res.status(200).json(new Message(200, 'OK', repo));
+            res.status(200).json({status: 200, message: 'OK', data: repo})
         }
-    } else res.status(400).json(new Message(400, 'request method not match.', null));
+    } else res.status(400).json({status: 400, message: 'request method not match.', data: null})
 }
