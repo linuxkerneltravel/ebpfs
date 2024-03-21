@@ -1,21 +1,21 @@
 import {Inter} from 'next/font/google'
-import Navbar from "@/pages/components/Navbar";
-import Button from "@/pages/components/Button";
-import {State} from "@/pages/_app";
-import {Account} from "@/common/account";
-import {Repository} from "@/common/repository";
-import {useEffect, useState} from "react";
-import Message from "@/common/message";
-import {Token} from "@/common/token";
-import {useRouter} from "next/router";
-import Input from "@/pages/components/Input";
+import Navbar from "@/pages/components/Navbar"
+import Button from "@/pages/components/Button"
+import {State} from "@/pages/_app"
+import {Account} from "@/common/account"
+import {Repository} from "@/common/repository"
+import {useEffect, useState} from "react"
+import Message from "@/common/message"
+import {Token} from "@/common/token"
+import {useRouter} from "next/router"
+import Input from "@/pages/components/Input"
 
 const inter = Inter({subsets: ['latin']})
 
 interface Response {
-    id: string;
-    account: Account;
-    repositories: Repository[];
+    id: string
+    account: Account
+    repositories: Repository[]
 }
 
 export default function AccountPage() {
@@ -23,33 +23,33 @@ export default function AccountPage() {
         State.load()
     }());
 
-    const router = useRouter();
-    const token = State.token as Token;
+    const router = useRouter()
+    const token = State.token as Token
 
     // 不要在任意 return 后使用 useState，因为这会导致每次渲染都会重置 state
-    const [result, setResult] = useState<Response>();
+    const [result, setResult] = useState<Response>()
 
     useEffect(() => {
         // 获取账号信息的逻辑
         // 这里的 Token 在 isLogin 校验中判定为非空 那么这里一定不为空
         fetch('/api/account', {headers: {'Authorization': token.token}})
             .then(result => result.json() as Promise<Message<Response>>)
-            .then(data => setResult(data.data));
+            .then(data => setResult(data.data))
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [])
 
     const copy = () => {
-        const input = document.createElement('input');
-        input.value = token.token;
-        document.body.appendChild(input);
-        input.select();
-        document.execCommand('copy');
-        document.body.removeChild(input);
+        const input = document.createElement('input')
+        input.value = token.token
+        document.body.appendChild(input)
+        input.select()
+        document.execCommand('copy')
+        document.body.removeChild(input)
     };
 
-    const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
+    const [email, setEmail] = useState<string>('')
+    const [password, setPassword] = useState<string>('')
 
     const login = () => {
         fetch('/api/login',
@@ -65,11 +65,11 @@ export default function AccountPage() {
             })
             .then(result => result.json())
             .then(() => router.push("/account")
-                .then(ignore => 0));
+                .then(ignore => 0))
     }
 
     const update = (org: string, project: string) => {
-        router.push(`/upload?update_organization=${org}&update_project=${project}`).then(ignore => 0);
+        router.push(`/upload?update_organization=${org}&update_project=${project}`).then(ignore => 0)
     }
 
     function renderLogin() {

@@ -1,39 +1,39 @@
 import {Inter} from 'next/font/google'
-import Card from "@/pages/components/Card";
-import Navbar from "@/pages/components/Navbar";
-import Button from "@/pages/components/Button";
-import {State} from "@/pages/_app";
-import Input from "@/pages/components/Input";
-import {useEffect, useState} from "react";
-import {useRouter} from "next/router";
-import Message from "@/common/message";
-import {Account} from "@/common/account";
-import {Token} from "@/common/token";
-import {Repository} from "@/common/repository";
-import {Statistic} from "@/common/statistic";
+import Card from "@/pages/components/Card"
+import Navbar from "@/pages/components/Navbar"
+import Button from "@/pages/components/Button"
+import {State} from "@/pages/_app"
+import Input from "@/pages/components/Input"
+import {useEffect, useState} from "react"
+import {useRouter} from "next/router"
+import Message from "@/common/message"
+import {Account} from "@/common/account"
+import {Token} from "@/common/token"
+import {Repository} from "@/common/repository"
+import {Statistic} from "@/common/statistic"
 
 const inter = Inter({subsets: ['latin']})
 
 interface LoginResponse {
-    account: Account;
-    token: Token;
+    account: Account
+    token: Token
 }
 
 interface RepositoryResponse {
-    repository: Repository[];
+    repository: Repository[]
 }
 
 interface StatisticResponse {
-    statistic: Statistic[];
+    statistic: Statistic[]
 }
 
 export default function Home() {
-    const router = useRouter();
+    const router = useRouter()
 
-    const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [repository, setRepository] = useState<Repository[]>([]);
-    const [statistic, setStatistic] = useState<Statistic[]>([]);
+    const [email, setEmail] = useState<string>('')
+    const [password, setPassword] = useState<string>('')
+    const [repository, setRepository] = useState<Repository[]>([])
+    const [statistic, setStatistic] = useState<Statistic[]>([])
 
     const login = () => {
         fetch('/api/login',
@@ -68,7 +68,7 @@ export default function Home() {
                     return router.push(re.data).then(() => {
                     });
                 }
-            });
+            })
     }
 
     useEffect(() => {
@@ -93,7 +93,7 @@ export default function Home() {
                     setStatistic(statistic);
                 }
             })
-    }, []);
+    }, [])
 
     return (
         <main style={{backgroundImage: `url("https://i.im.ge/2023/07/17/5jrzzK.F0ci1uZakAAukOL.jpg")`}}

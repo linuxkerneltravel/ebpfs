@@ -1,6 +1,6 @@
-import {Component} from "react";
-import {withRouter} from "next/router";
-import {WithRouterProps} from "next/dist/client/with-router";
+import {Component} from "react"
+import {withRouter} from "next/router"
+import {WithRouterProps} from "next/dist/client/with-router"
 
 interface AvatarProps extends WithRouterProps {
     src?: string;

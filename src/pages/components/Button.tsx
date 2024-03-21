@@ -1,12 +1,12 @@
-import {Component} from "react";
-import {withRouter} from "next/router";
-import {WithRouterProps} from "next/dist/client/with-router";
+import {Component} from "react"
+import {withRouter} from "next/router"
+import {WithRouterProps} from "next/dist/client/with-router"
 
 interface ButtonProps extends WithRouterProps {
-    text: string;
-    icon?: string;
-    href?: string;
-    onclick?: () => void;
+    text: string
+    icon?: string
+    href?: string
+    onclick?: () => void
 }
 
 class Button extends Component<ButtonProps> {
@@ -19,8 +19,8 @@ class Button extends Component<ButtonProps> {
                     backgroundColor: "#24282f"
                 }}
                 onClick={() => {
-                    this.props.onclick && this.props.onclick();
-                    this.props.href && this.props.router.push(this.props.href);
+                    this.props.onclick && this.props.onclick()
+                    this.props.href && this.props.router.push(this.props.href)
                 }}>
                 <a className="flex flex-row justify-center items-center"
                    style={{padding: "20px"}}>

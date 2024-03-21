@@ -1,44 +1,44 @@
-import {State} from "@/pages/_app";
-import {Token} from "@/common/token";
-import {useState} from "react";
-import Button from "@/pages/components/Button";
-import {Inter} from "next/font/google";
-import Input from "@/pages/components/Input";
-import {useRouter} from "next/router";
+import {State} from "@/pages/_app"
+import {Token} from "@/common/token"
+import {useState} from "react"
+import Button from "@/pages/components/Button"
+import {Inter} from "next/font/google"
+import Input from "@/pages/components/Input"
+import {useRouter} from "next/router"
 
 const inter = Inter({subsets: ['latin']})
 
 export default function UploadPage() {
     (function () {
         State.load()
-    }());
+    }())
 
-    const router = useRouter();
+    const router = useRouter()
     // 从上一个页面传递的参数
     // 如果不为 undefined 则为更新仓库
-    const {update_organization, update_project} = router.query;
+    const {update_organization, update_project} = router.query
 
     //
     // 提交仓库表单
     //
     // 组织
-    const [organization, setOrganization] = useState<string>(update_organization ? update_organization as string : '');
+    const [organization, setOrganization] = useState<string>(update_organization ? update_organization as string : '')
     // 项目
-    const [project, setProject] = useState<string>(update_project ? update_project as string : '');
+    const [project, setProject] = useState<string>(update_project ? update_project as string : '')
     // 版本
-    const [version, setVersion] = useState<string>('');
+    const [version, setVersion] = useState<string>('')
     // 仓库
-    const [repository, setRepository] = useState<string>('');
+    const [repository, setRepository] = useState<string>('')
     // README 链接
-    const [readme, setReadme] = useState<string>('');
+    const [readme, setReadme] = useState<string>('')
     // 入口
-    const [entry, setEntry] = useState<string>('');
+    const [entry, setEntry] = useState<string>('')
     // 作者
-    const [author, setAuthor] = useState<string[]>([]);
+    const [author, setAuthor] = useState<string[]>([])
     // 标签
-    const [tags, setTags] = useState<string[]>([]);
+    const [tags, setTags] = useState<string[]>([])
 
-    const token = State.token as Token;
+    const token = State.token as Token
 
     // TODO: 实现更新功能
     const submit = () => {
@@ -62,7 +62,7 @@ export default function UploadPage() {
             })
         })
             .then(result => result.json())
-            .then(() => router.push("/account").then(ignore => 0));
+            .then(() => router.push("/account").then(ignore => 0))
     };
 
     return (

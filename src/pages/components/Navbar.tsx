@@ -1,12 +1,12 @@
-import {Component} from "react";
-import Avatar from "@/pages/components/Avatar";
-import Searchbar from "@/pages/components/Searchbar";
-import Link from "next/link";
+import {Component} from "react"
+import Avatar from "@/pages/components/Avatar"
+import Searchbar from "@/pages/components/Searchbar"
+import Link from "next/link"
 
 interface NavbarProps {
-    src?: string;
-    alt?: string;
-    isGlass?: boolean;
+    src?: string
+    alt?: string
+    isGlass?: boolean
 }
 
 export default class Navbar extends Component<NavbarProps, {}> {

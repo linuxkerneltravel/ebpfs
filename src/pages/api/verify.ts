@@ -1,37 +1,37 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import Message from "@/common/message";
-import CacheService from "@/services/cache";
-import {Token, TokenType} from "@/common/token";
-import {Account, AccountType} from "@/common/account";
-import DatabaseService from "@/services/database";
-import {AccountTable} from "@/data/account";
+import Message from "@/common/message"
+import CacheService from "@/services/cache"
+import {Token, TokenType} from "@/common/token"
+import {Account, AccountType} from "@/common/account"
+import DatabaseService from "@/services/database"
+import {AccountTable} from "@/data/account"
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Message<any>>) {
     if (req.method === 'GET') {
-        const {email, password, code} = req.query;
+        const {email, password, code} = req.query
 
-        const tokens = new CacheService<Token>();
-        const token = await tokens.get(code as string);
+        const tokens = new CacheService<Token>()
+        const token = await tokens.get(code as string)
 
         if (!token) {
-            res.status(400).json(new Message(400, 'token expired.', null));
-            return;
+            res.status(400).json({status: 400, message: 'token expired.', data: null})
+            return
         }
 
         if (token.belong !== email) {
-            res.status(400).json(new Message(400, 'invalid token.', null));
-            return;
+            res.status(400).json({status: 400, message: 'invalid token.', data: null})
+            return
         }
 
         if (token.token !== code) {
-            res.status(400).json(new Message(400, 'invalid code.', null));
-            return;
+            res.status(400).json({status: 400, message: 'invalid code.', data: null})
+            return
         }
 
         // 修改密码
-        const accounts = new DatabaseService<Account>();
+        const accounts = new DatabaseService<Account>()
         // 检查表
-        await accounts.autoMigrate();
+        await accounts.autoMigrate()
         // 创建用户
         const account = new Account(
             crypto.randomUUID(),
@@ -43,22 +43,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             email,
             AccountType.EMAIL,
             new Date().getTime()
-        );
+        )
 
-        await accounts.createAccount(account);
+        await accounts.createAccount(account)
 
-        const time = new Date().getTime();
-        const expire = new Date(time + 60 * 60 * 1000).getTime();
-        const t = new Token(
-            crypto.randomUUID(),
-            account.id,
-            TokenType.ACCOUNT_API_KEY,
-            time,
-            expire
-        );
+        const time = new Date().getTime()
+        const expire = new Date(time + 60 * 60 * 1000).getTime()
+        const t: Token = {
+            token: crypto.randomUUID(),
+            belong: account.id,
+            type: TokenType.ACCOUNT_API_KEY,
+            created: time,
+            expire: expire
+        }
 
-        await tokens.set(t.token, t);
+        await tokens.set(t.token, t)
 
-        res.status(200).json(new Message(200, 'success', {account: account, token: t}));
-    } else res.status(400).json(new Message(400, 'request method not match.', null));
+        res.status(200).json({status: 200, message: 'success', data: {account: account, token: t}})
+    } else res.status(400).json({status: 400, message: 'request method not match.', data: null})
 }

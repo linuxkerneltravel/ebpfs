@@ -1,13 +1,13 @@
-import {Component} from "react";
-import {withRouter} from "next/router";
-import {WithRouterProps} from "next/dist/client/with-router";
+import {Component} from "react"
+import {withRouter} from "next/router"
+import {WithRouterProps} from "next/dist/client/with-router"
 
 interface RowProps extends WithRouterProps {
-    title: string;
-    text: string;
-    author: string[];
-    tags: string[];
-    url: string;
+    title: string
+    text: string
+    author: string[]
+    tags: string[]
+    url: string
 }
 
 class Row extends Component<RowProps> {

@@ -1,23 +1,26 @@
 import type {NextApiRequest, NextApiResponse} from 'next'
-import SearchService from "@/services/search";
-import Message from "@/common/message";
+import SearchService from "@/services/search"
+import Message from "@/common/message"
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<{}>) {
-    if (req.method === 'GET') {
-        const {query} = req.query;
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Message<any>>) {
+    if (req.method !== 'GET') {
+        res.status(400).json({status: 400, message: 'request method not match.', data: null})
+        return
+    }
 
-        if (!query) {
-            res.status(400).json(new Message(400, 'Query is not set', null));
-            return;
-        }
-        if (typeof query !== 'string') {
-            res.status(400).json(new Message(400, 'Query is not string', null));
-            return;
-        }
+    const {query} = req.query;
 
-        const search = new SearchService();
-        const result = await search.search(query);
+    if (!query) {
+        res.status(400).json({status: 400, message: 'Query is not set', data: null})
+        return
+    }
+    if (typeof query !== 'string') {
+        res.status(400).json({status: 400, message: 'Query is not string', data: null})
+        return
+    }
 
-        res.status(200).json(new Message(200, 'OK', result.hits));
-    } else res.status(400).json(new Message(400, 'request method not match.', null));
+    const search = new SearchService()
+    const result = await search.search(query)
+
+    res.status(200).json({status: 200, message: 'OK', data: result.hits})
 }

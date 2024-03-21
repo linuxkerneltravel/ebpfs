@@ -1,27 +1,27 @@
 import React, {useState} from 'react';
 
 interface Props {
-    placeholder: string;
-    height: string;
-    width: string;
-    indent?: string;
-    textColor?: string;
-    onChange: (value: string) => void;
-    onEnterPress: (value: string) => void;
+    placeholder: string
+    height: string
+    width: string
+    indent?: string
+    textColor?: string
+    onChange: (value: string) => void
+    onEnterPress: (value: string) => void
 }
 
 const Input: React.FC<Props> = ({onChange, onEnterPress, placeholder, height, width, textColor, indent}) => {
-    const [inputValue, setInputValue] = useState('');
+    const [inputValue, setInputValue] = useState('')
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value;
-        setInputValue(value);
-        onChange(value);
+        const value = event.target.value
+        setInputValue(value)
+        onChange(value)
     };
 
     const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
-            onEnterPress(inputValue);
+            onEnterPress(inputValue)
         }
     }
 
@@ -47,4 +47,4 @@ const Input: React.FC<Props> = ({onChange, onEnterPress, placeholder, height, wi
     );
 };
 
-export default Input;
+export default Input
